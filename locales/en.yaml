@@ -1,0 +1,71 @@
+name: English
+start: |
+  Currently access to the bot is limited, click the "join" button and we will add you to the waiting list.
+language: Please, select the language.
+language_selected: <b>This bot</b> now speaks English.
+main_menu: |
+ Add group - add a new group to track and receive summaries
+ 
+ Monitored groups - stop monitoring, change monitored words or get summary
+already_in: |
+  You are on the waiting list
+add_group_btn: Add group
+monitor_groups_btn: Monitored groups 
+send_link: |
+ Send a link to the group you want to follow.
+
+ Example of a correct link: https://t.me/askTG_chat or @askTG_chat
+not_yet_on_waiting_list: |
+ This function is available to a limited number of users. Add yourself to the waitlist and you will be notified as soon as it is your turn. 
+ To do this, click the "Join" button.
+already_on_waiting_list: |
+ You are already on the waiting list. 
+join_btn: Join
+cancel_selected: |
+ You are back to the main menu
+cancel: Cancel
+finish_btn: Finish
+setup_words: | 
+ List the words or phrases, separated by commas, that the bot should track in the group
+successfull_set: |
+  The group has been successfully added and is being monitored. 
+match: |
+ Found a match in group ${title}:
+
+ Message:
+
+ ${message}
+
+ Match:
+
+ ${matches}
+
+ <a href="${messageLink}">To messages</a>
+select_my_group: |
+ ${data.index} of ${data.length} of your groups
+
+ Title: ${data.title}
+
+ Link: ${data.link}
+
+ Tracked words: ${data.words} 
+absent: absent
+delete_group_btn: Delete group
+group_deleted: The group is no longer monitored.
+no_group_to_monitor: You don't have any monitored groups.
+change_words_btn: Change words
+words_changed: Words have been changed
+new_words_for_group: Write a new set of words to track
+select_summary_period: How recent a period of time would you like to receive a summary for?
+summary_btn: Summary
+one_hour_btn: 1 hour
+twenty_four_hours_btn: 24 hours
+two_days_btn: 2 days
+seven_days__btn: 7 days
+unavailable_function: We apologize, this feature is currently unavailable.
+group_already_exists: |
+ You are already tracking this group
+
+ If you want to stop tracking or change the set of tracked words,
+ then click the "Monitored groups" button
+main_menu_btn: Main menu
