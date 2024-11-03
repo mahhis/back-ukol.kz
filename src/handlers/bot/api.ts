@@ -107,14 +107,13 @@ function formatOrderMessage(orderDetails: TOrder): string {
 const BASE_URL_UPLOAD = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/uploadFile/${env.TOKEN}`
 
 export const uploadeAppointmentPhoto = async (file: any) => {
-  console.log(file.originalname)
   const filePath = path.join(__dirname, './../../../uploads', file.originalname) // Adjust the path as necessary
   const fileBuffer = fs.readFileSync(filePath) // Read the file into a buffer
 
   try {
     const response = await axios.post(BASE_URL_UPLOAD, fileBuffer, {
       headers: {
-        'Content-Type': 'image/jpeg', // Set the correct content type
+        'Content-Type': file.mimetype, // Set the correct content type
       },
     })
 
