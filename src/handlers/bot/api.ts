@@ -77,6 +77,8 @@ function formatOrderMessage(orderDetails: TOrder): string {
           return '• Премиум интоксикация'
         case 'isWithDressingMaterial':
           return '• С перевязочным материалом'
+        case 'isWithMaterialsPoisoning':
+          return '• С препаратами'
         default:
           return ''
       }

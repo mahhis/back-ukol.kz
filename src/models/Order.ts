@@ -25,6 +25,7 @@ export class Order {
     isWithDrugsCocktail: boolean
     isPremiumIntoxication: boolean
     isWithDressingMaterial: boolean
+    isWithMaterialsPoisoning: boolean
     photo: any
     daysForNurse: number
     message: string
