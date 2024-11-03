@@ -70,7 +70,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
         case 'isNeedPharmacy':
           return '• Нужно зайти в аптеку'
         case 'isHaveDoctorsAppointment':
-          return '• Есть назаначение врача'
+          return '• Есть назначение врача'
         case 'isWithDrugsCocktail':
           return '• Нужны препараты для коктейля'
         case 'isPremiumIntoxication':
