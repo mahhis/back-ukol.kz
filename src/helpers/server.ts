@@ -1,9 +1,10 @@
 import { Server } from 'http'
 import { bootstrapControllers } from 'amala'
+import { koaBody } from 'koa-body'
 import { resolve } from 'path'
 import Koa from 'koa'
 import Router from 'koa-router'
-import bodyParser from 'koa-bodyparser'
+//import bodyParser from 'koa-bodyparser'
 import cookie from 'koa-cookie'
 import cors from '@koa/cors'
 import env from '@/helpers/env'
@@ -20,6 +21,9 @@ export default async function () {
     })
   )
   app.use(cookie())
+  app.use(koaBody())
+  app.use(router.routes())
+  app.use(router.allowedMethods())
 
   await bootstrapControllers({
     app,
@@ -42,15 +46,13 @@ export default async function () {
   //     credentials: true, // Allow credentials (cookies, etc.)
   //   })
   // )
+
   app.use(
     cors({
       origin: env.DEV_URL,
       credentials: true,
     })
   )
-  app.use(bodyParser())
-  app.use(router.routes())
-  app.use(router.allowedMethods())
 
   return new Promise<Server>((resolve, reject) => {
     const connection = app

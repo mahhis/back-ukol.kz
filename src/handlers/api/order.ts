@@ -5,31 +5,49 @@ import { badRequest } from '@hapi/boom'
 import { createOrder } from '@/models/Order'
 import { sendMessage, uploadeAppointmentPhoto } from '@/handlers/bot/api'
 import authorize from '@/midleware/auth'
+import fs from 'fs'
+import multer from '@koa/multer'
+import path from 'path'
 
+const upload = multer({ dest: './uploads' })
 @Controller('order')
 export default class OrderController {
   @Flow([authorize])
+  @Flow([upload.single('file')])
   @Post('/uploadPhoto')
-  uploadeAppointmentPhoto(@Ctx() ctx: Context) {
-    console.log(123)
-    // try {
-    //   // Access the uploaded file
-    //   const res = ctx.req.files
+  async uploadeAppointmentPhoto(@Ctx() ctx: Context) {
+    try {
+      const file = ctx.file
 
-    //   console.log(res)
+      if (!file) {
+        ctx.throw(400, 'No file uploaded')
+      }
 
-    //   if (!res) {
-    //     ctx.throw(badRequest('Photo is required'))
-    //   }
+      // Define the path to save the file
+      const uploadPath = path.join(
+        __dirname,
+        './../../../uploads',
+        file.originalname
+      )
 
-    //   ctx.body = {
-    //     success: true,
-    //     message: 'File uploaded successfully!',
-    //   }
-    // } catch (e) {
-    //   console.error('Error while uploading photo:', e)
-    //   ctx.throw(badRequest(e))
-    // }
+      // Move the file to the uploads directory
+      fs.rename(file.path, uploadPath, (err) => {
+        if (err) {
+          console.error('Error saving file:', err)
+          ctx.throw(500, 'Error saving file')
+        }
+      })
+
+      console.log(file)
+      const response = await uploadeAppointmentPhoto(file)
+      return {
+        success: true,
+        data: { photoURL: response.urlFile },
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error)
+      ctx.throw(500, 'Error uploading file')
+    }
   }
 
   @Flow([authorize])

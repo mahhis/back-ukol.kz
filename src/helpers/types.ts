@@ -21,7 +21,7 @@ export type TOrder = {
     isWithDrugsCocktail: boolean
     isPremiumIntoxication: boolean
     isWithDressingMaterial: boolean
-    photo: any
+    photoURL: string
     daysForNurse: number
     message: string
   }

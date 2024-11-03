@@ -1,12 +1,12 @@
-import { Order } from '@/models/Order'
-import { Readable } from 'stream'
 import { TOrder } from '@/helpers/types'
 import FormData from 'form-data' // Ensure you're importing the form-data package
 import axios from 'axios'
 import env from '@/helpers/env'
-
+import fs from 'fs'
+import path from 'path'
 // Add 'http://' to the URL
 const BASE_UEL_SEND_MESSAGE = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/sendMessage/${env.TOKEN}`
+const BASE_URL_SEND_FILE = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/sendFileByUrl/${env.TOKEN}`
 
 export const sendMessage = async (orderDetails: TOrder) => {
   try {
@@ -14,6 +14,23 @@ export const sendMessage = async (orderDetails: TOrder) => {
       chatId: env.CHAT_ID_TEST,
       message: formatOrderMessage(orderDetails),
     }
+
+    // Check if photoURL exists in orderDetails
+    if (orderDetails.options.photoURL) {
+      const filePayload = {
+        chatId: env.CHAT_ID_TEST,
+        urlFile: orderDetails.options.photoURL,
+        fileName: 'Назначение', // You can customize this as needed
+        caption: formatOrderMessage(orderDetails), // You can customize this as needed
+      }
+      const response = await axios.post(BASE_URL_SEND_FILE, filePayload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      return response.data
+    }
+
     const response = await axios.post(BASE_UEL_SEND_MESSAGE, payload)
     return response.data
   } catch (error) {
@@ -88,19 +105,21 @@ function formatOrderMessage(orderDetails: TOrder): string {
 const BASE_URL_UPLOAD = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/uploadFile/${env.TOKEN}`
 
 export const uploadeAppointmentPhoto = async (file: any) => {
-  const formData = new FormData()
-  if (file instanceof Readable) {
-    formData.append('file', file, { filename: 'uploaded-file' }) // Provide a filename for the uploaded file
-  } else {
-    formData.append('file', file, {
-      filename: file.originalname || 'uploaded-file',
-    })
-  }
-  const headers = {
-    'Content-Type': `multipart/form-data; boundary=${formData.getBoundary()}`,
-  }
-  const response = await axios.post(BASE_URL_UPLOAD, formData, { headers })
+  console.log(file.originalname)
+  const filePath = path.join(__dirname, './../../../uploads', file.originalname) // Adjust the path as necessary
+  const fileBuffer = fs.readFileSync(filePath) // Read the file into a buffer
 
-  console.log(response)
-  return response
+  try {
+    const response = await axios.post(BASE_URL_UPLOAD, fileBuffer, {
+      headers: {
+        'Content-Type': 'image/jpeg', // Set the correct content type
+      },
+    })
+
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error uploading file:', error)
+    throw error
+  }
 }
