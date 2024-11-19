@@ -14,6 +14,8 @@ export type TUser = {
 export type TOrder = {
   title?: string
   address?: string
+  lat?: number
+  lng?: number
   amount?: number
   options: {
     isNeedPharmacy: boolean

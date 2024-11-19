@@ -42,8 +42,7 @@ export default class MapController {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?place_id=${place_id}&key=${env.GOOGLE_MAP_API_KEY}`
       )
-      console.log(123)
-      console.log(response.data.results[0].geometry)
+
 
       return {
         success: true,
@@ -67,8 +66,6 @@ export default class MapController {
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=ru&&key=${env.GOOGLE_MAP_API_KEY}`
       )
-      console.log(456)
-      console.log(response.data.results[0].formatted_address)
 
       return {
         success: true,

@@ -1,5 +1,4 @@
 import { TOrder } from '@/helpers/types'
-import FormData from 'form-data' // Ensure you're importing the form-data package
 import axios from 'axios'
 import env from '@/helpers/env'
 import fs from 'fs'
@@ -94,10 +93,12 @@ function formatOrderMessage(orderDetails: TOrder): string {
         } минуты`
 
   // Construct the message
+  const LINK_TO_YANDEX_MAP = `https://yandex.ru/maps/?ll=${orderDetails.lat},${orderDetails.lng}&z=18&l=map`
   return (
     `📢 *Заказ*\n\n` +
     `*Заголовок:* ${title || 'N/A'}\n` +
     `*Адрес:* ${address || 'N/A'}\n` +
+    `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
     `${arrivalTimeMessage}\n`
