@@ -93,7 +93,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
         } минуты`
 
   // Construct the message
-  const LINK_TO_YANDEX_MAP = `https://yandex.ru/maps/?ll=${orderDetails.lat},${orderDetails.lng}&z=18&l=map`
+  const LINK_TO_YANDEX_MAP = `https://yandex.ru/maps/?ll=${orderDetails.lng},${orderDetails.lat}&z=18&l=map&pt=${orderDetails.lng},${orderDetails.lat}`
   return (
     `📢 *Заказ*\n\n` +
     `*Заголовок:* ${title || 'N/A'}\n` +

@@ -54,6 +54,7 @@ export default class OrderController {
   @Post('/create')
   async create(@Ctx() ctx: Context, @Body({ required: true }) order: TOrder) {
     try {
+      console.log(order)
       const idMessageWA = await sendMessage(order)
       order.idMessageWA = idMessageWA.idMessage
       const newOrder = await createOrder(ctx.state['user'], order)
