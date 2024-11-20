@@ -5,6 +5,7 @@ import { resolve } from 'path'
 import Koa from 'koa'
 import Router from 'koa-router'
 //import bodyParser from 'koa-bodyparser'
+import { logIncomingMessages } from '@/helpers/scheduller'
 import cookie from 'koa-cookie'
 import cors from '@koa/cors'
 import env from '@/helpers/env'
@@ -53,6 +54,8 @@ export default async function () {
       credentials: true,
     })
   )
+
+  await logIncomingMessages()
 
   return new Promise<Server>((resolve, reject) => {
     const connection = app

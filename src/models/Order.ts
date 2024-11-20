@@ -39,9 +39,15 @@ export class Order {
   }
   @prop()
   idMessageWA?: string
+
+  @prop({ default: 'waiting' })
+  status?: string
+
+  @prop({ default: 999 })
+  bestBit?: number
 }
 
-const OrderModel = getModelForClass(Order)
+export const OrderModel = getModelForClass(Order)
 
 // Update `findOrCreateOrder` function
 export async function createOrder(user: TUser, orderData: TOrder) {
@@ -58,4 +64,17 @@ export async function createOrder(user: TUser, orderData: TOrder) {
 
   // Create a new order in the database
   return await OrderModel.create(order)
+}
+
+export async function getOrdersByIdMessageWA(idMessageWA: string) {
+  try {
+    // Find all orders with the given idMessageWA
+    const orders = await OrderModel.find({ idMessageWA })
+      .populate('user')
+      .exec()
+    return orders[0]
+  } catch (error) {
+    console.error('Error fetching orders by idMessageWA:', error)
+    throw error
+  }
 }

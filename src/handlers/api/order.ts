@@ -3,7 +3,11 @@ import { Context } from 'koa'
 import { TOrder } from '@/helpers/types'
 import { badRequest } from '@hapi/boom'
 import { createOrder } from '@/models/Order'
-import { sendMessage, uploadeAppointmentPhoto } from '@/handlers/bot/api'
+import {
+  sendConfirmationMessageToUser,
+  sendMessageToSpecialists,
+  uploadeAppointmentPhoto,
+} from '@/handlers/bot/api'
 import authorize from '@/midleware/auth'
 import fs from 'fs'
 import multer from '@koa/multer'
@@ -54,8 +58,8 @@ export default class OrderController {
   @Post('/create')
   async create(@Ctx() ctx: Context, @Body({ required: true }) order: TOrder) {
     try {
-      console.log(order)
-      const idMessageWA = await sendMessage(order)
+      const idMessageWA = await sendMessageToSpecialists(order)
+      await sendConfirmationMessageToUser(order, ctx.state['user'].phoneNumber)
       order.idMessageWA = idMessageWA.idMessage
       const newOrder = await createOrder(ctx.state['user'], order)
       return {

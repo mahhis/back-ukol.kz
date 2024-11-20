@@ -2,6 +2,7 @@ import { Body, Controller, Ctx, Get, Post } from 'amala'
 import { Context } from 'koa'
 import { checkCode, checkPhone, refresh } from '@/models/User'
 
+import { OrderModel } from '@/models/Order'
 import { TPhoneNumber, TPhoneNumberAndCode } from '@/helpers/types'
 import { badRequest, unauthorized } from '@hapi/boom'
 //import authorize from '@/midleware/auth'
@@ -19,10 +20,15 @@ export default class AuthController {
         httpOnly: true,
         sameSite: 'lax',
       })
+      const hasWaitingOrder = await OrderModel.exists({
+        user: user._id,
+        status: 'waiting',
+      })
       return {
         success: true,
         user: user.strippedAndFilled({ withExtra: true }),
         accessToken: accessToken,
+        haveActualOrder: Boolean(hasWaitingOrder), // Convert result to a boolean
       }
     } catch (e) {
       console.log(e)
@@ -42,10 +48,16 @@ export default class AuthController {
         httpOnly: true,
         sameSite: 'lax',
       })
+      const hasWaitingOrder = await OrderModel.exists({
+        user: user._id,
+        status: 'waiting',
+      })
+
       return {
         success: true,
         user: user.strippedAndFilled({ withExtra: true }),
         accessToken: accessToken,
+        haveActualOrder: Boolean(hasWaitingOrder), // Convert result to a boolean
       }
     } catch (e) {
       console.log(e)
