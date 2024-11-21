@@ -74,6 +74,21 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
   }
 }
 
+export const notifyAboutCansel = async (quotedMessageId: string) => {
+  try {
+    const payload = {
+      chatId: env.CHAT_ID_TEST,
+      message: 'Заказ отменен',
+      quotedMessageId: quotedMessageId,
+    }
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching last incoming messages:', error)
+    throw error
+  }
+}
+
 export const sendConfirmationMessageToUser = async (
   orderDetails: TOrder,
   number: string

@@ -67,6 +67,8 @@ export default class MapController {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&language=ru&&key=${env.GOOGLE_MAP_API_KEY}`
       )
 
+      console.log(lat, lng)
+
       return {
         success: true,
         formatted_address: response.data.results[0].formatted_address,

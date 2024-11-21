@@ -10,6 +10,7 @@ import {
 } from '@/models/Order'
 import { isBefore, subMinutes } from 'date-fns'
 import {
+  notifyAboutCansel,
   sendConfirmationMessageToUser,
   sendMessageToSpecialists,
   uploadeAppointmentPhoto,
@@ -101,6 +102,7 @@ export default class OrderController {
         }
       }
       await removeOrder(order)
+      await notifyAboutCansel(order!.idMessageWA!)
       // Proceed to remove the order
       return {
         success: true,
