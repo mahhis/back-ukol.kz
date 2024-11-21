@@ -4,7 +4,6 @@ import {
   fetchLastIncomingMessages,
   sendSpecialistAlredyFindedMessageToUser,
 } from '@/handlers/bot/api'
-import { isValidObjectId } from 'mongoose'
 import env from '@/helpers/env'
 
 export const logIncomingMessages = async () => {

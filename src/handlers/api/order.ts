@@ -2,7 +2,13 @@ import { Body, Controller, Ctx, Flow, Get, Post } from 'amala'
 import { Context } from 'koa'
 import { TOrder } from '@/helpers/types'
 import { badRequest } from '@hapi/boom'
-import { createOrder } from '@/models/Order'
+import {
+  createOrder,
+  getLastOrderByUser,
+  getOrderById,
+  removeOrder,
+} from '@/models/Order'
+import { isBefore, subMinutes } from 'date-fns'
 import {
   sendConfirmationMessageToUser,
   sendMessageToSpecialists,
@@ -69,6 +75,38 @@ export default class OrderController {
     } catch (e) {
       console.error('Error while creating order:', e)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      ctx.throw(badRequest(e))
+    }
+  }
+
+  @Flow([authorize])
+  @Post('/cancel')
+  async cancel(
+    @Ctx() ctx: Context,
+    @Body({ required: true }) { orderID }: any
+  ) {
+    try {
+      const order = await getOrderById(orderID)
+
+      if (!order) {
+        return {
+          success: false,
+        }
+      }
+      // Check if the order is older than 5 minutes
+      const fiveMinutesAgo = subMinutes(new Date(), 5)
+      if (isBefore(order.createdAt, fiveMinutesAgo)) {
+        return {
+          success: false,
+        }
+      }
+      await removeOrder(order)
+      // Proceed to remove the order
+      return {
+        success: true,
+      }
+    } catch (e) {
+      console.error('Error while canceling order:', e)
       ctx.throw(badRequest(e))
     }
   }

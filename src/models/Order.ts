@@ -1,6 +1,7 @@
 import { Ref, getModelForClass, modelOptions, prop } from '@typegoose/typegoose'
 import { TOrder, TUser } from '@/helpers/types' // Assuming you have a User model defined
 import { User } from '@/models/User'
+import { omit, result } from 'lodash'
 
 @modelOptions({
   schemaOptions: { timestamps: true },
@@ -45,6 +46,27 @@ export class Order {
 
   @prop({ default: 999 })
   bestBit?: number
+
+  strippedAndFilled(
+    this: any,
+    { withExtra = false }: { withExtra?: boolean; withToken?: boolean } = {}
+  ) {
+    const stripFields = [
+      'updatedAt',
+      'bestBit',
+      'idMessageWA',
+      '__v',
+      'user',
+      'address',
+      'amount',
+      'arrivalTime',
+      'options',
+    ]
+    if (!withExtra) {
+      stripFields.push('phoneNumber')
+    }
+    return omit(this.toObject(), stripFields)
+  }
 }
 
 export const OrderModel = getModelForClass(Order)
@@ -75,6 +97,41 @@ export async function getOrdersByIdMessageWA(idMessageWA: string) {
     return orders[0]
   } catch (error) {
     console.error('Error fetching orders by idMessageWA:', error)
+    throw error
+  }
+}
+export async function getLastOrderByUser(user: TUser) {
+  try {
+    const lastOrder = await OrderModel.findOne({ user: user })
+      .sort({ createdAt: -1 }) // Sort by `createdAt` in descending order
+      .populate('user') // Populate user reference if needed
+      .exec()
+
+    return lastOrder
+  } catch (error) {
+    console.error('Error fetching the last order by user:', error)
+    throw error
+  }
+}
+
+export async function removeOrder(order: any): Promise<void> {
+  try {
+    order.status = 'canceled'
+    await order.save()
+  } catch (error) {
+    console.error('Error while removing order:', error)
+    throw error
+  }
+}
+export async function getOrderById(orderID: string) {
+  try {
+    const order = await OrderModel.findById(orderID).populate('user').exec()
+    if (!order) {
+      throw new Error('Order not found')
+    }
+    return order as unknown as Document & { createdAt: Date } & Order
+  } catch (error) {
+    console.error('Error fetching order by ID:', error)
     throw error
   }
 }
