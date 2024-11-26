@@ -7,6 +7,7 @@ import path from 'path'
 const BASE_URL_SEND_MESSAGE = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/sendMessage/${env.TOKEN}`
 const BASE_URL_SEND_FILE = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/sendFileByUrl/${env.TOKEN}`
 const BASE_URL_LAST_INCOMING_MESSAGES = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/lastIncomingMessages/${env.TOKEN}`
+const GET_MESSAGE_BY_ID = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/getMessage/${env.TOKEN}`
 
 export const fetchLastIncomingMessages = async (minutes = 5) => {
   try {
@@ -56,7 +57,6 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
   number: string
 ) => {
   try {
-    console.log(333)
     const userChatID = number + '@c.us'
     const arrivalTime = time + 10
     const payload = {
@@ -65,8 +65,7 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
     }
 
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
-    console.log(111)
-    console.log(response)
+
     return response.data
   } catch (error) {
     console.error('Error creating order:', error)
@@ -74,15 +73,72 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
   }
 }
 
-export const notifyAboutCansel = async (quotedMessageId: string) => {
+export const sendUserDataToSpecialist = async (
+  IdMessageOrder: string,
+  numberSpecialist: string,
+  numberUser: string
+) => {
   try {
-    const payload = {
+    const payloadForGetMessageOrder = {
       chatId: env.CHAT_ID_TEST,
-      message: 'Заказ отменен',
-      quotedMessageId: quotedMessageId,
+      idMessage: IdMessageOrder,
     }
+    const messageOrder: any = await axios.post(
+      GET_MESSAGE_BY_ID,
+      payloadForGetMessageOrder
+    )
+
+    const payload = {
+      chatId: numberSpecialist + '@c.us',
+      message:
+        `Вы были выбраны как исполнитель заказа: \n\n` +
+        `${messageOrder.data.textMessage}  \n\n` +
+        `номер для связи с клиентом: ${numberUser}`,
+    }
+
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
     return response.data
+  } catch (error) {
+    console.error('Error creating order:', error)
+    throw error
+  }
+}
+
+// export const notifyAboutCansel = async (order: any) => {
+//   try {
+//     const payload = {
+//       chatId: env.CHAT_ID_TEST,
+//       message: 'Заказ отменен',
+//       quotedMessageId: order.idMessageWA,
+//     }
+//     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+//     return response.data
+//   } catch (error) {
+//     console.error('Error fetching last incoming messages:', error)
+//     throw error
+//   }
+// }
+
+export const notifyAboutCansel = async (order: any) => {
+  try {
+    if (order.ownerBestBit) {
+      const payload = {
+        chatId: order.ownerBestBit + '@c.us',
+        message: 'Заказ отменен',
+      }
+
+      const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+      return response.data
+    } else {
+      const payload = {
+        chatId: env.CHAT_ID_TEST,
+        message: 'Заказ отменен',
+        quotedMessageId: order.idMessageWA,
+      }
+      const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+      return response.data
+    }
   } catch (error) {
     console.error('Error fetching last incoming messages:', error)
     throw error

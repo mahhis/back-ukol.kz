@@ -102,7 +102,7 @@ export default class OrderController {
         }
       }
       await removeOrder(order)
-      await notifyAboutCansel(order!.idMessageWA!)
+      await notifyAboutCansel(order)
       // Proceed to remove the order
       return {
         success: true,

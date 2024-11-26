@@ -3,6 +3,7 @@ import { User } from '@/models/User'
 import {
   fetchLastIncomingMessages,
   sendSpecialistAlredyFindedMessageToUser,
+  sendUserDataToSpecialist,
 } from '@/handlers/bot/api'
 import env from '@/helpers/env'
 
@@ -45,13 +46,11 @@ async function yourFunctionToCall(array: any[]) {
         continue
       }
 
-      console.log(333)
-      console.log(order)
-
       // Update bestBit if the incoming value is smaller
       const incomingBit = Number(message.extendedTextMessage.text)
       if (incomingBit < (order.bestBit ?? 999)) {
         order.bestBit = incomingBit
+        order.ownerBestBit = message.senderId.slice(0, -5) // '12345678@c.us' -> '12345678'
         await order.save()
         console.log(
           `Updated bestBit for order ${order.idMessageWA} to ${incomingBit}`
@@ -69,7 +68,6 @@ async function yourFunctionToCall(array: any[]) {
       }
       order.status = 'taked'
       await order.save()
-
     } catch (error) {
       console.error(
         `Error processing message ${message.extendedTextMessage.stanzaId}:`,
@@ -87,15 +85,16 @@ async function yourFunctionToCall(array: any[]) {
       )
       return
     }
-
-    console.log(99)
-
-    const res = await sendSpecialistAlredyFindedMessageToUser(
+    await sendSpecialistAlredyFindedMessageToUser(
       order.bestBit!,
       user.phoneNumber
     )
-    console.log(88)
-    console.log(res)
+
+    const res = await sendUserDataToSpecialist(
+      order.idMessageWA!,
+      order.ownerBestBit!,
+      user.phoneNumber
+    )
   })
 
   console.log('Unique processed orders:', res)

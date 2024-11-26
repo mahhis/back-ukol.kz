@@ -47,6 +47,9 @@ export class Order {
   @prop({ default: 999 })
   bestBit?: number
 
+  @prop()
+  ownerBestBit?: string
+
   strippedAndFilled(
     this: any,
     { withExtra = false }: { withExtra?: boolean; withToken?: boolean } = {}
