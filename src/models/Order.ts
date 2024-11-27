@@ -37,6 +37,7 @@ export class Order {
     hours: string
     minutes: string
     isNearestHour: boolean
+    date: string | null
   }
   @prop()
   idMessageWA?: string

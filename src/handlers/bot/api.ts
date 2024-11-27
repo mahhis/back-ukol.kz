@@ -53,20 +53,22 @@ export const sendMessageToSpecialists = async (orderDetails: TOrder) => {
 }
 
 export const sendSpecialistAlredyFindedMessageToUser = async (
-  time: number,
+  order: any,
   number: string
 ) => {
   try {
-    const userChatID = number + '@c.us'
-    const arrivalTime = time + 10
-    const payload = {
-      chatId: userChatID,
-      message: `Специалист найден! Он будет у вас через ${arrivalTime} минут`,
+    if (order.arrivalTime.isNearestHour) {
+      const userChatID = number + '@c.us'
+      const arrivalTime = order.bestBit + 10
+      const payload = {
+        chatId: userChatID,
+        message: `Специалист найден! Он будет у вас через ${arrivalTime} минут`,
+      }
+
+      const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+      return response.data
     }
-
-    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
-
-    return response.data
   } catch (error) {
     console.error('Error creating order:', error)
     throw error
@@ -269,7 +271,9 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const arrivalTimeMessage =
     arrivalTime && arrivalTime.isNearestHour
       ? '*На время:* ближайшее время'
-      : `*На время:* ${arrivalTime?.hours || 'N/A'} часов ${
+      : 
+      `*На дату :* ${arrivalTime?.date} \n` +
+      `*На время :* ${arrivalTime?.hours || 'N/A'} часов ${
           arrivalTime?.minutes || 'N/A'
         } минуты`
 

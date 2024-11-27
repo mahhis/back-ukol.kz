@@ -86,10 +86,7 @@ async function yourFunctionToCall(array: any[]) {
       )
       return
     }
-    await sendSpecialistAlredyFindedMessageToUser(
-      order.bestBit!,
-      user.phoneNumber
-    )
+    await sendSpecialistAlredyFindedMessageToUser(order, user.phoneNumber)
 
     await sendUserDataToSpecialist(
       order.idMessageWA!,

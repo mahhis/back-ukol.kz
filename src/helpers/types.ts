@@ -32,6 +32,7 @@ export type TOrder = {
     hours: string
     minutes: string
     isNearestHour: boolean
+    date: string | null
   }
   idMessageWA?: string
 }
