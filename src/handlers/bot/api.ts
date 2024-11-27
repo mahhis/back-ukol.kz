@@ -88,12 +88,19 @@ export const sendUserDataToSpecialist = async (
       payloadForGetMessageOrder
     )
 
+    let message
+    if (messageOrder.data.typeMessage == 'extendedTextMessage') {
+      message = messageOrder.data.textMessage
+    } else {
+      message = messageOrder.data.caption
+    }
+
     const payload = {
       chatId: numberSpecialist + '@c.us',
       message:
         `Вы были выбраны как исполнитель заказа: \n\n` +
-        `${messageOrder.data.textMessage}  \n\n` +
-        `номер для связи с клиентом: ${numberUser}`,
+        `${message}  \n\n` +
+        `номер для связи с клиентом: +${numberUser}`,
     }
 
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
@@ -121,13 +128,20 @@ export const sendUserDataToAdmin = async (
       payloadForGetMessageOrder
     )
 
+    let message
+    if (messageOrder.data.typeMessage == 'extendedTextMessage') {
+      message = messageOrder.data.textMessage
+    } else {
+      message = messageOrder.data.caption
+    }
+
     const payload = {
       chatId: adminNumber + '@c.us',
       message:
         `На заказ: \n\n` +
-        `${messageOrder.data.textMessage}  \n\n` +
-        `Был выбран специалист с номером: ${numberSpecialist} \n` +
-        `Номер клиента для связи : ${numberUser}`,
+        `${message}  \n\n` +
+        `Был выбран специалист с номером: +${numberSpecialist} \n` +
+        `Номер клиента для связи : +${numberUser}`,
     }
 
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
