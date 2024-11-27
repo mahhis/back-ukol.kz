@@ -99,7 +99,7 @@ async function yourFunctionToCall(array: any[]) {
 
     await sendUserDataToAdmin(
       order.idMessageWA!,
-      '7027776776',
+      '77027776776',
       order.ownerBestBit!,
       user.phoneNumber
     )
