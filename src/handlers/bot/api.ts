@@ -172,7 +172,7 @@ export const notifyAboutCansel = async (order: any) => {
   try {
     if (order.ownerBestBit) {
       const payloadAdmin = {
-        chatId: '7027776776@c.us',
+        chatId: env.ADMIN_NUMBER + '@c.us',
         message: `Заказ для ${order.ownerBestBit} отменен`,
       }
 

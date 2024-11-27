@@ -17,4 +17,5 @@ export default cleanEnv(process.env, {
   DEV_URL: str(),
   PROD_URL: str(),
   GOOGLE_MAP_API_KEY: str(),
+  ADMIN_NUMBER: str(),
 })
