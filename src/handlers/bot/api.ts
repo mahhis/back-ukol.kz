@@ -105,6 +105,40 @@ export const sendUserDataToSpecialist = async (
   }
 }
 
+export const sendUserDataToAdmin = async (
+  IdMessageOrder: string,
+  adminNumber: string,
+  numberSpecialist: string,
+  numberUser: string
+) => {
+  try {
+    const payloadForGetMessageOrder = {
+      chatId: env.CHAT_ID_TEST,
+      idMessage: IdMessageOrder,
+    }
+    const messageOrder: any = await axios.post(
+      GET_MESSAGE_BY_ID,
+      payloadForGetMessageOrder
+    )
+
+    const payload = {
+      chatId: adminNumber + '@c.us',
+      message:
+        `На заказ: \n\n` +
+        `${messageOrder.data.textMessage}  \n\n` +
+        `Был выбран специалист с номером: ${numberSpecialist} \n` +
+        `Номер клиента для связи : ${numberUser}`,
+    }
+
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+    return response.data
+  } catch (error) {
+    console.error('Error creating order:', error)
+    throw error
+  }
+}
+
 // export const notifyAboutCansel = async (order: any) => {
 //   try {
 //     const payload = {
@@ -123,6 +157,13 @@ export const sendUserDataToSpecialist = async (
 export const notifyAboutCansel = async (order: any) => {
   try {
     if (order.ownerBestBit) {
+      const payloadAdmin = {
+        chatId: '7027776776@c.us',
+        message: `Заказ для ${order.ownerBestBit} отменен`,
+      }
+
+      await axios.post(BASE_URL_SEND_MESSAGE, payloadAdmin)
+
       const payload = {
         chatId: order.ownerBestBit + '@c.us',
         message: 'Заказ отменен',

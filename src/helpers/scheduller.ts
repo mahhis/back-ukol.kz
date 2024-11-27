@@ -3,6 +3,7 @@ import { User } from '@/models/User'
 import {
   fetchLastIncomingMessages,
   sendSpecialistAlredyFindedMessageToUser,
+  sendUserDataToAdmin,
   sendUserDataToSpecialist,
 } from '@/handlers/bot/api'
 import env from '@/helpers/env'
@@ -90,8 +91,15 @@ async function yourFunctionToCall(array: any[]) {
       user.phoneNumber
     )
 
-    const res = await sendUserDataToSpecialist(
+    await sendUserDataToSpecialist(
       order.idMessageWA!,
+      order.ownerBestBit!,
+      user.phoneNumber
+    )
+
+    await sendUserDataToAdmin(
+      order.idMessageWA!,
+      '7027776776',
       order.ownerBestBit!,
       user.phoneNumber
     )
