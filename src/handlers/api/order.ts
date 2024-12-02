@@ -6,6 +6,7 @@ import {
   createOrder,
   getLastOrderByUser,
   getOrderById,
+  getOrderByUserPhoneNumberWithActiveOrder,
   removeOrder,
 } from '@/models/Order'
 import { isBefore, subMinutes } from 'date-fns'
@@ -114,9 +115,13 @@ export default class OrderController {
       ctx.throw(badRequest(e))
     }
   }
-
+  @Flow([authorize])
   @Get('/check')
-  check() {
-    console.log('Check endpoint called')
+  async checkOrder(@Ctx() ctx: Context) {
+    const order = await getOrderByUserPhoneNumberWithActiveOrder(ctx.state['user'].phoneNumber)
+    return {
+      order: order,
+      success: true,
+    }
   }
 }
