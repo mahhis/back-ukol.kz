@@ -287,6 +287,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
     `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
+    `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
     `${arrivalTimeMessage}`
   )
 }
@@ -357,6 +358,7 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
     `*Адрес:* ${address || 'N/A'}\n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
+    `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
     `${arrivalTimeMessage}\n`
   )
 }
