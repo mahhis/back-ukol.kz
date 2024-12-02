@@ -12,6 +12,7 @@ import { isBefore, subMinutes } from 'date-fns'
 import {
   notifyAboutCansel,
   sendConfirmationMessageToUser,
+  sendHowToTakeOrderMessage,
   sendMessageToSpecialists,
   uploadeAppointmentPhoto,
 } from '@/handlers/bot/api'
@@ -66,6 +67,7 @@ export default class OrderController {
   async create(@Ctx() ctx: Context, @Body({ required: true }) order: TOrder) {
     try {
       const idMessageWA = await sendMessageToSpecialists(order)
+      await sendHowToTakeOrderMessage(idMessageWA)
       await sendConfirmationMessageToUser(order, ctx.state['user'].phoneNumber)
       order.idMessageWA = idMessageWA.idMessage
       const newOrder = await createOrder(ctx.state['user'], order)

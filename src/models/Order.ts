@@ -1,6 +1,6 @@
 import { Ref, getModelForClass, modelOptions, prop } from '@typegoose/typegoose'
 import { TOrder, TUser } from '@/helpers/types' // Assuming you have a User model defined
-import { User } from '@/models/User'
+import { User, UserModel } from '@/models/User'
 import { omit, result } from 'lodash'
 
 @modelOptions({
@@ -136,6 +136,44 @@ export async function getOrderById(orderID: string) {
     return order as unknown as Document & { createdAt: Date } & Order
   } catch (error) {
     console.error('Error fetching order by ID:', error)
+    throw error
+  }
+}
+
+export async function getOrdersWithStatusTaken() {
+  try {
+    const orders = await OrderModel.find({ status: 'taken' })
+      .populate('user')
+      .exec()
+    return orders
+  } catch (error) {
+    console.error('Error fetching orders with status "taken":', error)
+    throw error
+  }
+}
+
+export async function getOrderByUserPhoneNumberWithActiveOrder(
+  phoneNumber: string
+) {
+  try {
+    // Find the user with the given phone number
+    const user = await UserModel.findOne({ phoneNumber }).exec()
+
+    if (!user) {
+      throw new Error(`User with phoneNumber ${phoneNumber} not found`)
+    }
+
+    // Find the order associated with the user
+    const order = await OrderModel.findOne({
+      user: user._id,
+      status: { $in: ['taken', 'waiting'] }, // Filter for 'taken' or 'waiting'
+    })
+      .populate('user') // Populate user details if needed
+      .exec()
+
+    return order
+  } catch (error) {
+    console.error(`Error fetching order by phoneNumber ${phoneNumber}:`, error)
     throw error
   }
 }
