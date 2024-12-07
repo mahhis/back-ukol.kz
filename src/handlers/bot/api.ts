@@ -16,8 +16,7 @@ export const fetchLastIncomingMessages = async (minutes = 5) => {
     })
     return response.data
   } catch (error) {
-    console.error('Error fetching last incoming messages:', error)
-    throw error
+    console.error('Error fetching last incoming messages:')
   }
 }
 
@@ -68,7 +67,6 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
       const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
 
       return response.data
-    } else {
     }
   } catch (error) {
     console.error('Error creating order:', error)
@@ -287,6 +285,9 @@ function formatOrderMessage(orderDetails: TOrder): string {
     `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
+    (options.daysForNurse !== 0
+      ? `*Количество смен для медсестры:* ${options.daysForNurse}\n`
+      : '') +
     `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
     `${arrivalTimeMessage}`
   )
@@ -345,14 +346,17 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
   const arrivalTimeMessage =
     arrivalTime && arrivalTime.isNearestHour
       ? '*На время:* ближайшее время'
-      : `*На время:* ${arrivalTime?.hours || 'N/A'} часов ${
+      : `*На дату :* ${arrivalTime?.date} \n` +
+        `*На время :* ${arrivalTime?.hours || 'N/A'} часов ${
           arrivalTime?.minutes || 'N/A'
         } минуты`
 
   // Construct the message
   return (
     `✅*Ваш заказ успешно получен*✅\n\n` +
-    `Мы оповестим вас о том когда подберем вам подходящую медсетсру и через сколько она приедет\n\n` +
+    (arrivalTime.isNearestHour
+      ? `Мы оповестим вас о том когда подберем вам подходящего специалиста\n\n`
+      : '') +
     `*Детали заказа:*\n` +
     `*Услуга:* ${title || 'N/A'}\n` +
     `*Адрес:* ${address || 'N/A'}\n` +
@@ -377,23 +381,23 @@ export const sendMessage = async (to: string, message: string) => {
   }
 }
 
-export const sendHowToTakeOrderMessage = async (quotedMessage: any) => {
-  try {
+// export const sendHowToTakeOrderMessage = async (quotedMessage: any) => {
+//   try {
 
-    const message =
-      `*Инструкция как взять заказ:* \n\n` +
-      `*Что бы взять заказ смахните сообщение сверху слева направо и отправьте сообщение с количеством минут которые вам потребуются что бы взять заказ* \n\n` +
-      `или \n\n` +
-      `*Зажмите сообщение сверху до появления меню, нажмите кнопку «↰ ответить» и отправьте сообщение с количеством минут которые вам потребуются что бы взять заказ*`
-    const payload = {
-      chatId: env.CHAT_ID_TEST,
-      quotedMessageId: quotedMessage.idMessage,
-      message: message,
-    }
-    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
-    return response.data
-  } catch (error) {
-    console.error('Error creating order:', error)
-    throw error
-  }
-}
+//     const message =
+//       `*Инструкция как взять заказ:* \n\n` +
+//       `*Что бы взять заказ смахните сообщение сверху слева направо и отправьте сообщение с количеством минут которые вам потребуются что бы взять заказ* \n\n` +
+//       `или \n\n` +
+//       `*Зажмите сообщение сверху до появления меню, нажмите кнопку «↰ ответить» и отправьте сообщение с количеством минут которые вам потребуются что бы взять заказ*`
+//     const payload = {
+//       chatId: env.CHAT_ID_TEST,
+//       quotedMessageId: quotedMessage.idMessage,
+//       message: message,
+//     }
+//     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+//     return response.data
+//   } catch (error) {
+//     console.error('Error creating order:', error)
+//     throw error
+//   }
+// }

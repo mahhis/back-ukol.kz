@@ -77,7 +77,9 @@ async function handleCancelOrder(messages: any[]) {
           console.log('No phone number provided for cancellation.')
           continue
         }
-        const order = await getOrderByUserPhoneNumberWithActiveOrder(phoneNumber)
+        const order = await getOrderByUserPhoneNumberWithActiveOrder(
+          phoneNumber
+        )
 
         if (!order) {
           console.error(`No order found for phone number: ${phoneNumber}`)
@@ -178,9 +180,6 @@ async function handleResponseOnOrder(messages: any[]) {
       const order = await getOrdersByIdMessageWA(
         message.extendedTextMessage.stanzaId
       )
-      if (order.status != 'waiting') {
-        continue
-      }
 
       if (!order) {
         console.log(
@@ -189,18 +188,22 @@ async function handleResponseOnOrder(messages: any[]) {
         continue
       }
 
+      if (order.status != 'waiting') {
+        continue
+      }
+
       // Update bestBit if the incoming value is smaller
       const incomingBit = Number(message.extendedTextMessage.text)
 
-      if (!isNaN(incomingBit)) {
+      if (!isNaN(incomingBit) && order.arrivalTime?.isNearestHour) {
+
         if (incomingBit < (order.bestBit ?? 999)) {
           order.bestBit = incomingBit
           order.ownerBestBit = message.senderId.slice(0, -5) // '12345678@c.us' -> '12345678'
-          await order.save()
           console.log(
             `Updated bestBit for order ${order.idMessageWA} to ${incomingBit}`
           )
-        } else {
+        } else  {
           console.log(
             `Incoming bit (${incomingBit}) is not better than current bestBit (${order.bestBit})`
           )
@@ -213,6 +216,27 @@ async function handleResponseOnOrder(messages: any[]) {
         }
         order.status = 'taken'
         await order.save()
+      } else if (!order.arrivalTime?.isNearestHour) {
+        const matchingMessages = responseToOrderMessages.filter(
+          (msg) => msg.extendedTextMessage.stanzaId === order.idMessageWA
+        )
+
+        // Find the earliest message among the matching messages
+        const earliestMessage = matchingMessages.reduce((earliest, current) => {
+          const currentTimestamp = new Date(current.timestamp).getTime() // Adjust this based on your timestamp property
+          const earliestTimestamp = new Date(earliest.timestamp).getTime() // Adjust this based on your timestamp property
+          return currentTimestamp < earliestTimestamp ? current : earliest
+        })
+
+        if (!uniqueOrderIds.has(order.idMessageWA!)) {
+          uniqueOrderIds.add(order.idMessageWA!)
+          res.push(order)
+        }
+        order.ownerBestBit = message.senderId.slice(0, -5)
+        order.status = 'taken'
+        await order.save()
+
+        console.log('Earliest message:', earliestMessage)
       }
     } catch (error) {
       console.error(
