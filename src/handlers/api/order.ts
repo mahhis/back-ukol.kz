@@ -48,8 +48,6 @@ export default class OrderController {
           ctx.throw(500, 'Error saving file')
         }
       })
-
-      console.log(file)
       const response = await uploadeAppointmentPhoto(file)
       return {
         success: true,

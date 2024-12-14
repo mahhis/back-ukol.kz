@@ -46,8 +46,6 @@ export default class AuthController {
         sameSite: 'lax',
       })
       const currnetOrder = await getLastOrderByUser(user)
-
-
       return {
         success: true,
         user: user.strippedAndFilled({ withExtra: true }),

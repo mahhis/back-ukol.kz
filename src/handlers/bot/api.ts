@@ -51,6 +51,23 @@ export const sendMessageToSpecialists = async (orderDetails: TOrder) => {
   }
 }
 
+export const sendOrderTakenToGroup = async (order: any) => {
+  try {
+    const payload = {
+      chatId: env.CHAT_ID_TEST,
+      message: `❗️Специалист для этого заказа выбран. Предложения на этот вызов больше не обрабатываются❗️`,
+      quotedMessageId: order.idMessageWA,
+    }
+
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+    return response.data
+  } catch (error) {
+    console.error('Error creating order:', error)
+    throw error
+  }
+}
+
 export const sendSpecialistAlredyFindedMessageToUser = async (
   order: any,
   number: string
@@ -61,7 +78,7 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
       const arrivalTime = order.bestBit + 10
       const payload = {
         chatId: userChatID,
-        message: `Специалист найден! Он будет у вас через ${arrivalTime} минут`,
+        message: `🚑 Специалист подтвердил ваш заказ и уже выехал! Ожидайте через ${arrivalTime} минут`,
       }
 
       const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
@@ -99,10 +116,11 @@ export const sendUserDataToSpecialist = async (
     const payload = {
       chatId: numberSpecialist + '@c.us',
       message:
-        `Вы были выбраны как исполнитель заказа: \n\n` +
-        `${message}  \n\n` +
-        `номер для связи с клиентом: +${numberUser}\n\n` +
-        `После выполнения заказа отправьте в этот чат слово «готово», после этого в течении минуты заказ будет завершен \n\n`,
+        `Вы были выбраны как исполнитель заказа \n\n` +
+        `Номер для связи с клиентом: +${numberUser}\n` +
+        `❕Пожалуйста, позвоните ему перед выездом и скажите, что вы уже выехали❕\n\n` +
+        `После выполнения заказа отправьте в этот чат слово «готово», после этого в течении минуты заказ будет завершен \n\n` +
+        `${message}  \n\n`,
     }
 
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
@@ -305,8 +323,6 @@ export const uploadeAppointmentPhoto = async (file: any) => {
         'Content-Type': file.mimetype, // Set the correct content type
       },
     })
-
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('Error uploading file:', error)

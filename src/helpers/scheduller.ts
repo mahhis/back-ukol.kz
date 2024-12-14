@@ -8,6 +8,7 @@ import { User } from '@/models/User'
 import {
   fetchLastIncomingMessages,
   sendMessage,
+  sendOrderTakenToGroup,
   sendSpecialistAlredyFindedMessageToUser,
   sendUserDataToAdmin,
   sendUserDataToSpecialist,
@@ -255,6 +256,8 @@ async function handleResponseOnOrder(messages: any[]) {
       )
       return
     }
+    await sendOrderTakenToGroup(order)
+
     await sendSpecialistAlredyFindedMessageToUser(order, user.phoneNumber)
 
     await sendUserDataToSpecialist(
