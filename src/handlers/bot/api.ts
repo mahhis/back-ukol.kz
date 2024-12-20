@@ -372,7 +372,7 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
     `✅*Ваш заказ успешно получен*✅\n\n` +
     (arrivalTime.isNearestHour
       ? `Мы оповестим вас о том когда подберем вам подходящего специалиста\n\n`
-      : '') +
+      : `Специалист будет к указанному времени, ожидайте\n\n`) +
     `*Детали заказа:*\n` +
     `*Услуга:* ${title || 'N/A'}\n` +
     `*Адрес:* ${address || 'N/A'}\n` +
