@@ -8,6 +8,10 @@ import {
   getOrderByUserPhoneNumberWithActiveOrder,
   removeOrder,
 } from '@/models/Order'
+import {
+  handleCancelOrComplete,
+  handleResponseOnOrder,
+} from '@/helpers/answers'
 import { isBefore, subMinutes } from 'date-fns'
 import {
   notifyAboutCansel,
@@ -15,7 +19,9 @@ import {
   sendMessageToSpecialists,
   uploadeAppointmentPhoto,
 } from '@/handlers/bot/api'
+import { scheduleOrderTimeout } from '@/helpers/schedullerAnswers'
 import authorize from '@/midleware/auth'
+import env from '@/helpers/env'
 import fs from 'fs'
 import multer from '@koa/multer'
 import path from 'path'
@@ -68,6 +74,10 @@ export default class OrderController {
       await sendConfirmationMessageToUser(order, ctx.state['user'].phoneNumber)
       order.idMessageWA = idMessageWA.idMessage
       const newOrder = await createOrder(ctx.state['user'], order)
+
+      const delay = 60000 // 5 minutes in milliseconds
+      await scheduleOrderTimeout(newOrder.id, delay)
+
       return {
         data: newOrder,
         success: true,
@@ -114,10 +124,42 @@ export default class OrderController {
   @Flow([authorize])
   @Get('/check')
   async checkOrder(@Ctx() ctx: Context) {
-    const order = await getOrderByUserPhoneNumberWithActiveOrder(ctx.state['user'].phoneNumber)
+    const order = await getOrderByUserPhoneNumberWithActiveOrder(
+      ctx.state['user'].phoneNumber
+    )
     return {
       order: order,
       success: true,
+    }
+  }
+
+  @Post('/reply')
+  async answerOnOrder(@Body({ required: true }) data: any) {
+    try {
+      const { typeWebhook } = data
+      if (typeWebhook == 'outgoingMessageReceived') {
+        return {
+          status: 200,
+        }
+      }
+
+      const { senderData } = data
+      const { chatId } = senderData || {}
+
+      if (chatId.endsWith('@g.us') && chatId == env.CHAT_ID_TEST) {
+        await handleResponseOnOrder(data)
+      } else if (chatId.endsWith('@c.us')) {
+        await handleCancelOrComplete(data)
+      }
+
+      return {
+        status: 200,
+      }
+    } catch (e) {
+      console.log('error: ', e)
+      return {
+        status: 200,
+      }
     }
   }
 }

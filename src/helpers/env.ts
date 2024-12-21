@@ -14,8 +14,8 @@ export default cleanEnv(process.env, {
   CHAT_ID_TEST: str(),
   JWT_ACCESS_SECRET: str(),
   JWT_REFRESH_SECRET: str(),
-  DEV_URL: str(),
   PROD_URL: str(),
+  NGROK_URL: str(),
   GOOGLE_MAP_API_KEY: str(),
   ADMIN_NUMBER: str(),
 })

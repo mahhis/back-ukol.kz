@@ -1,7 +1,7 @@
 import { Ref, getModelForClass, modelOptions, prop } from '@typegoose/typegoose'
 import { TOrder, TUser } from '@/helpers/types' // Assuming you have a User model defined
 import { User, UserModel } from '@/models/User'
-import { omit, result } from 'lodash'
+import { omit } from 'lodash'
 
 @modelOptions({
   schemaOptions: { timestamps: true },
@@ -50,6 +50,9 @@ export class Order {
 
   @prop()
   ownerBestBit?: string
+
+  @prop({ required: true, default: Date.now })
+  createdAt!: Date
 
   strippedAndFilled(
     this: any,
@@ -104,6 +107,20 @@ export async function getOrdersByIdMessageWA(idMessageWA: string) {
     throw error
   }
 }
+
+export async function getOrderById(orderID: string) {
+  try {
+    const order = await OrderModel.findById(orderID).populate('user').exec()
+    if (!order) {
+      throw new Error('Order not found')
+    }
+    return order
+  } catch (error) {
+    console.error('Error fetching order by ID:', error)
+    throw error
+  }
+}
+
 export async function getLastOrderByUser(user: TUser) {
   try {
     const lastOrder = await OrderModel.findOne({ user: user })
@@ -124,18 +141,6 @@ export async function removeOrder(order: any): Promise<void> {
     await order.save()
   } catch (error) {
     console.error('Error while removing order:', error)
-    throw error
-  }
-}
-export async function getOrderById(orderID: string) {
-  try {
-    const order = await OrderModel.findById(orderID).populate('user').exec()
-    if (!order) {
-      throw new Error('Order not found')
-    }
-    return order as unknown as Document & { createdAt: Date } & Order
-  } catch (error) {
-    console.error('Error fetching order by ID:', error)
     throw error
   }
 }

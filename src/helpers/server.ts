@@ -5,11 +5,11 @@ import { resolve } from 'path'
 import Koa from 'koa'
 import Router from 'koa-router'
 //import bodyParser from 'koa-bodyparser'
-import {
-  getCancelMessage,
-  getCompleteOrder,
-  getResponseToOrder,
-} from '@/helpers/scheduller'
+// import {
+//   getCancelMessage,
+//   getCompleteOrder,
+//   getResponseToOrder,
+// } from '@/helpers/scheduller'
 import cookie from 'koa-cookie'
 import cors from '@koa/cors'
 import env from '@/helpers/env'
@@ -19,12 +19,38 @@ const app = new Koa()
 export default async function () {
   const router = new Router()
 
+  const allowedOrigins = [
+    env.PROD_URL,
+    env.NGROK_URL,
+    '46.101.109.139',
+    '51.250.12.167',
+    '51.250.84.44',
+    '51.250.95.149',
+    '89.169.137.216',
+    '158.160.49.84',
+    '165.22.93.202',
+    '167.172.162.71',
+  ]
+
   app.use(
     cors({
-      origin: env.DEV_URL,
+      origin: (ctx) => {
+        const requestOrigin = ctx.request.header.origin || ''
+        if (allowedOrigins.includes(requestOrigin)) {
+          return requestOrigin
+        }
+        return env.PROD_URL
+      },
       credentials: true,
     })
   )
+
+  // app.use(
+  //   cors({
+  //     origin: env.PROD_URL,
+  //     credentials: true,
+  //   })
+  // )
   app.use(cookie())
   app.use(koaBody())
   app.use(router.routes())
@@ -37,31 +63,30 @@ export default async function () {
     disableVersioning: true,
     router,
   })
-  // const allowedOrigins = [env.DEV_URL, env.PROD_URL, 'http://localhost:5173/']
-
-  // app.use(
-  //   cors({
-  //     origin: (ctx) => {
-  //       const requestOrigin = ctx.request.header.origin || ''
-  //       if (allowedOrigins.includes(requestOrigin)) {
-  //         return requestOrigin // Return the allowed origin
-  //       }
-  //       return env.DEV_URL // Return the default DEV_URL if the origin is not allowed
-  //     },
-  //     credentials: true, // Allow credentials (cookies, etc.)
-  //   })
-  // )
 
   app.use(
     cors({
-      origin: env.DEV_URL,
+      origin: (ctx) => {
+        const requestOrigin = ctx.request.header.origin || ''
+        if (allowedOrigins.includes(requestOrigin)) {
+          return requestOrigin
+        }
+        return env.PROD_URL
+      },
       credentials: true,
     })
   )
 
-  await getResponseToOrder()
-  await getCompleteOrder()
-  await getCancelMessage()
+  // app.use(
+  //   cors({
+  //     origin: env.PROD_URL,
+  //     credentials: true,
+  //   })
+  // )
+
+  // await getResponseToOrder()
+  // await getCompleteOrder()
+  // await getCancelMessage()
 
   return new Promise<Server>((resolve, reject) => {
     const connection = app
