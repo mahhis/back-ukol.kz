@@ -158,7 +158,10 @@ export default class OrderController {
   async answerOnOrder(@Body({ required: true }) data: any) {
     try {
       const { typeWebhook } = data
-      if (typeWebhook == 'outgoingMessageReceived') {
+      if (
+        typeWebhook == 'outgoingMessageReceived' ||
+        data.messageData.extendedTextMessageData == undefined
+      ) {
         return {
           status: 200,
         }
