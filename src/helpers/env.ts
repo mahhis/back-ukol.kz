@@ -18,4 +18,6 @@ export default cleanEnv(process.env, {
   NGROK_URL: str(),
   GOOGLE_MAP_API_KEY: str(),
   ADMIN_NUMBER: str(),
+  TELEGRAM_CHAT_ID: str(),
+  TELEGRAM_BOT_TOKEN: str(),
 })

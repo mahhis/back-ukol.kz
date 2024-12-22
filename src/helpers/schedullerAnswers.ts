@@ -1,11 +1,6 @@
 // scheduller.ts
 import { User } from '@/models/User'
-import {
-  getOrderById,
-  getOrdersByIdMessageWA,
-  removeOrder,
-} from '@/models/Order'
-import { isBefore, subMinutes } from 'date-fns'
+import { getOrderById } from '@/models/Order'
 import {
   sendOrderTakenToGroup,
   sendSpecialistAlredyFindedMessageToUser,
@@ -18,7 +13,7 @@ import env from '@/helpers/env'
 export const activeOrderTimeouts = new Map<string, NodeJS.Timeout>()
 
 // Function to schedule a timeout for an order
-export const scheduleOrderTimeout = async (orderID: string, delay: number) => {
+export const scheduleOrderTimeout = async (orderID: string) => {
   const timeout = setTimeout(async () => {
     try {
       const order = await getOrderById(orderID)
@@ -53,7 +48,7 @@ export const scheduleOrderTimeout = async (orderID: string, delay: number) => {
     } catch (error) {
       console.error(`Error handling timeout for order ${orderID}:`, error)
     }
-  }, delay)
+  }, 130000)
 
   activeOrderTimeouts.set(orderID, timeout)
 }

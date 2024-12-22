@@ -1,7 +1,8 @@
 import { User } from '@/models/User'
+import { activeOrderTimeouts } from '@/helpers/schedullerAnswers'
 import {
+  getLastOrderWithOwnerBestBit,
   getOrdersByIdMessageWA,
-  getOrdersWithStatusTaken,
 } from '@/models/Order'
 import {
   sendMessage,
@@ -11,7 +12,6 @@ import {
 import { sendUserDataToAdmin } from '@/handlers/bot/api'
 import { sendUserDataToSpecialist } from '@/handlers/bot/api'
 import env from '@/helpers/env'
-import { activeOrderTimeouts } from './schedullerAnswers'
 
 export const handleResponseOnOrder = async (data: any) => {
   const order = await getOrdersByIdMessageWA(
@@ -82,15 +82,15 @@ export const handleResponseOnOrder = async (data: any) => {
 }
 
 export const handleCancelOrComplete = async (data: any) => {
-  if (data.messageData.extendedTextMessageData == undefined){
+  if (data.messageData.extendedTextMessageData == undefined) {
     return
   }
   const messageInc = data.messageData.extendedTextMessageData.text
   if (messageInc.toLowerCase().trim() === 'готово') {
-    const takenOrders = await getOrdersWithStatusTaken()
-    const order = takenOrders.find(
-      (order) => order.ownerBestBit === data.senderData.chatId.slice(0, -5)
+    const order = await getLastOrderWithOwnerBestBit(
+      data.senderData.chatId.slice(0, -5)
     )
+
     if (order) {
       // Update the status of the order
       order.status = 'complete'

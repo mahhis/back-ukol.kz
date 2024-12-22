@@ -22,6 +22,7 @@ import {
 import { scheduleOrderTimeout } from '@/helpers/schedullerAnswers'
 import authorize from '@/midleware/auth'
 import env from '@/helpers/env'
+import errorNotification from '@/helpers/errorNotification'
 import fs from 'fs'
 import multer from '@koa/multer'
 import path from 'path'
@@ -59,8 +60,14 @@ export default class OrderController {
         success: true,
         data: { photoURL: response.urlFile },
       }
-    } catch (error) {
-      console.error('Error uploading file:', error)
+    } catch (e) {
+      console.error('Error uploading file:', e)
+      const errorMessage =
+        `*Error in /uploadPhoto Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n`
+
+      await errorNotification(errorMessage)
       ctx.throw(500, 'Error uploading file')
     }
   }
@@ -74,9 +81,7 @@ export default class OrderController {
       await sendConfirmationMessageToUser(order, ctx.state['user'].phoneNumber)
       order.idMessageWA = idMessageWA.idMessage
       const newOrder = await createOrder(ctx.state['user'], order)
-
-      const delay = 60000 // 5 minutes in milliseconds
-      await scheduleOrderTimeout(newOrder.id, delay)
+      await scheduleOrderTimeout(newOrder.id)
 
       return {
         data: newOrder,
@@ -84,6 +89,15 @@ export default class OrderController {
       }
     } catch (e) {
       console.error('Error while creating order:', e)
+
+      const errorMessage =
+        `*Error in /create Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(order, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       ctx.throw(badRequest(e))
     }
@@ -118,6 +132,13 @@ export default class OrderController {
       }
     } catch (e) {
       console.error('Error while canceling order:', e)
+      const errorMessage =
+        `*Error in /cancel Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(orderID, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
       ctx.throw(badRequest(e))
     }
   }
@@ -156,7 +177,17 @@ export default class OrderController {
         status: 200,
       }
     } catch (e) {
-      console.log('error: ', e)
+      console.log('Error: ', e)
+
+      // Send a Telegram notification
+      const errorMessage =
+        `*Error in /reply Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(data, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
+
       return {
         status: 200,
       }

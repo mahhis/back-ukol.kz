@@ -145,14 +145,19 @@ export async function removeOrder(order: any): Promise<void> {
   }
 }
 
-export async function getOrdersWithStatusTaken() {
+export async function getLastOrderWithOwnerBestBit(ownerBestBit: string) {
   try {
-    const orders = await OrderModel.find({ status: 'taken' })
-      .populate('user')
+    const lastOrder = await OrderModel.findOne({ ownerBestBit })
+      .sort({ createdAt: -1 }) // Sort by `createdAt` in descending order
+      .populate('user') // Populate user reference if needed
       .exec()
-    return orders
+
+    return lastOrder
   } catch (error) {
-    console.error('Error fetching orders with status "taken":', error)
+    console.error(
+      `Error fetching the last order with ownerBestBit ${ownerBestBit}:`,
+      error
+    )
     throw error
   }
 }
