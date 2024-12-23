@@ -20,6 +20,10 @@ export const handleResponseOnOrder = async (data: any) => {
   if (!order) {
     return
   }
+  if (order.status != 'waiting') {
+    console.error(`Order taken`)
+    return
+  }
 
   const isOrderOlderThan2Minutes =
     order.createdAt.getTime() < Date.now() - 2 * 60 * 1000
