@@ -258,57 +258,84 @@ export const sendVerificationCode = async (phoneNumber: string) => {
 }
 
 function formatOrderMessage(orderDetails: TOrder): string {
-  // Extracting necessary fields
-  const { title, address, amount, options, arrivalTime } = orderDetails
+  const {
+    title,
+    streetAndBuildingNumber,
+    flat,
+    floor,
+    amount,
+    options,
+    arrivalTime,
+  } = orderDetails
 
   // Prepare options list, filtering out falsy values and formatting the output
   const optionsList = Object.entries(options)
-    .filter(([, value]) => value) // Keep only options with truthy values
+    .filter(([, value]) => value) // Оставляем только те опции, у которых значения "правдивы"
     .map(([key]) => {
-      // Replace keys with user-friendly strings
+      // Заменяем ключи на удобочитаемые строки
       switch (key) {
         case 'isNeedPharmacy':
-          return '• Нужно зайти в аптеку'
+          return 'нужно зайти в аптеку'
         case 'isHaveDoctorsAppointment':
-          return '• Есть назначение врача'
+          return 'есть назначение врача'
         case 'isWithDrugsCocktail':
-          return '• Нужны препараты для коктейля'
+          return 'нужны препараты для коктейля'
         case 'isPremiumIntoxication':
-          return '• Премиум интоксикация'
+          return 'премиум интоксикация'
         case 'isWithDressingMaterial':
-          return '• С перевязочным материалом'
+          return 'с перевязочным материалом'
         case 'isWithMaterialsPoisoning':
-          return '• С препаратами'
+          return 'с препаратами'
         default:
           return ''
       }
     })
-    .join('\n')
+    .join(', ') // Перечисляем через запятую
 
   // Determine arrival time message
   const arrivalTimeMessage =
     arrivalTime && arrivalTime.isNearestHour
-      ? '*На время:* ближайшее время'
-      : `*На дату :* ${arrivalTime?.date} \n` +
-        `*На время :* ${arrivalTime?.hours || 'N/A'} часов ${
-          arrivalTime?.minutes || 'N/A'
-        } минуты`
+      ? 'сейчас'
+      : `${arrivalTime?.date},` +
+        `${arrivalTime?.hours}ч ${arrivalTime?.minutes}мин`
+
+  const price = amount !== 0 ? `${amount}₸` : 'цена рассчитывается...'
+
+  const encodedAddress = encodeURIComponent(streetAndBuildingNumber!)
+  const LINK_2GIS = `https://2gis.kz/almaty/search/${encodedAddress}`
+
+  const flatTEXT = flat ? `${flat}кв` : ''
+  const foorTEXT = floor ? `${floor}этаж` : ''
+
+  const msg =
+    `
+  ${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
+      `${foorTEXT}` || ''
+    } \n\n` +
+    `${LINK_2GIS} \n\n` +
+    `${title} \n` +
+    `${`${optionsList}\n\n` || ''}` +
+    `${arrivalTimeMessage}\n\n` +
+    `${price}\n`
+
+  return msg
 
   // Construct the message
-  const LINK_TO_YANDEX_MAP = `https://yandex.ru/maps/?ll=${orderDetails.lng},${orderDetails.lat}&z=18&l=map&pt=${orderDetails.lng},${orderDetails.lat}`
-  return (
-    `📢 *Заказ*\n\n` +
-    `*Услуга:* ${title || 'N/A'}\n` +
-    `*Адрес:* ${address || 'N/A'}\n` +
-    `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
-    `*Итог к оплате:* ${amount || 0}₸\n` +
-    `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
-    (options.daysForNurse !== 0
-      ? `*Количество смен для медсестры:* ${options.daysForNurse}\n`
-      : '') +
-    `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
-    `${arrivalTimeMessage}`
-  )
+
+  //const LINK_TO_YANDEX_MAP = `https://yandex.ru/maps/?ll=${orderDetails.lng},${orderDetails.lat}&z=18&l=map&pt=${orderDetails.lng},${orderDetails.lat}`
+  // return (
+  //   `📢 *Заказ*\n\n` +
+  //   `*Услуга:* ${title || 'N/A'}\n` +
+  //   `*Адрес:* ${streetAndBuildingNumber}, \n` +
+  //   `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
+  //   `*Итог к оплате:* ${amount || 0}₸\n` +
+  //   `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
+  //   (options.daysForNurse !== 0
+  //     ? `*Количество смен для медсестры:* ${options.daysForNurse}\n`
+  //     : '') +
+  //   `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
+  //   `${arrivalTimeMessage}`
+  // )
 }
 
 const BASE_URL_UPLOAD = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/uploadFile/${env.TOKEN}`
@@ -332,7 +359,8 @@ export const uploadeAppointmentPhoto = async (file: any) => {
 
 function formatConfirmationMessage(orderDetails: TOrder): string {
   // Extracting necessary fields
-  const { title, address, amount, options, arrivalTime } = orderDetails
+  const { title, streetAndBuildingNumber, amount, options, arrivalTime } =
+    orderDetails
 
   // Prepare options list, filtering out falsy values and formatting the output
   const optionsList = Object.entries(options)
@@ -375,7 +403,7 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
       : `Специалист будет к указанному времени, ожидайте\n\n`) +
     `*Детали заказа:*\n` +
     `*Услуга:* ${title || 'N/A'}\n` +
-    `*Адрес:* ${address || 'N/A'}\n` +
+    `*Адрес:* ${streetAndBuildingNumber || 'N/A'}\n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
     `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +

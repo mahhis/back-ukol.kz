@@ -14,7 +14,12 @@ export class Order {
   title!: string
 
   @prop({ required: true })
-  address!: string
+  streetAndBuildingNumber!: string
+
+  @prop()
+  flat?: string
+  @prop()
+  floor?: string
 
   @prop({ required: true, default: 0 })
   amount!: number
@@ -64,7 +69,7 @@ export class Order {
       'idMessageWA',
       '__v',
       'user',
-      'address',
+      'streetAndBuildingNumber',
       'amount',
       'arrivalTime',
       'options',
@@ -84,7 +89,7 @@ export async function createOrder(user: TUser, orderData: TOrder) {
   const order = {
     user: user, // Set the user reference
     title: orderData.title,
-    address: orderData.address,
+    streetAndBuildingNumber: orderData.streetAndBuildingNumber,
     amount: orderData.amount,
     options: orderData.options, // Use options from orderData
     arrivalTime: orderData.arrivalTime, // Use arrivalTime from orderData
