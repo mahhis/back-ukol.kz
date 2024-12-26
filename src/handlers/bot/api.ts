@@ -290,13 +290,14 @@ function formatOrderMessage(orderDetails: TOrder): string {
           return ''
       }
     })
+    .filter((value) => value)
     .join(', ') // Перечисляем через запятую
 
   // Determine arrival time message
   const arrivalTimeMessage =
     arrivalTime && arrivalTime.isNearestHour
-      ? 'сейчас'
-      : `${arrivalTime?.date},` +
+      ? 'На сейчас'
+      : `На ${arrivalTime?.date},` +
         `${arrivalTime?.hours}ч ${arrivalTime?.minutes}мин`
 
   const price = amount !== 0 ? `${amount}₸` : 'цена рассчитывается...'
@@ -306,17 +307,19 @@ function formatOrderMessage(orderDetails: TOrder): string {
 
   const flatTEXT = flat ? `${flat}кв` : ''
   const foorTEXT = floor ? `${floor}этаж` : ''
+  const optionTEXT = optionsList ? `${optionsList}\n\n` : ''
+  const messageTEXT = options.message ? `${options.message}\n\n` : ''
 
   const msg =
-    `
-  ${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
+    `${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
       `${foorTEXT}` || ''
     } \n\n` +
     `${LINK_2GIS} \n\n` +
-    `${title} \n` +
-    `${`${optionsList}\n\n` || ''}` +
+    `${title} \n\n` +
+    `${optionTEXT}` +
+    `${messageTEXT}` +
     `${arrivalTimeMessage}\n\n` +
-    `${price}\n`
+    `${price}`
 
   return msg
 
@@ -359,8 +362,15 @@ export const uploadeAppointmentPhoto = async (file: any) => {
 
 function formatConfirmationMessage(orderDetails: TOrder): string {
   // Extracting necessary fields
-  const { title, streetAndBuildingNumber, amount, options, arrivalTime } =
-    orderDetails
+  const {
+    title,
+    streetAndBuildingNumber,
+    flat,
+    floor,
+    amount,
+    options,
+    arrivalTime,
+  } = orderDetails
 
   // Prepare options list, filtering out falsy values and formatting the output
   const optionsList = Object.entries(options)
@@ -395,6 +405,8 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
           arrivalTime?.minutes || 'N/A'
         } минуты`
 
+  const flatTEXT = flat ? `${flat}кв` : ''
+  const foorTEXT = floor ? `${floor}этаж` : ''
   // Construct the message
   return (
     `✅*Ваш заказ успешно получен*✅\n\n` +
@@ -403,7 +415,9 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
       : `Специалист будет к указанному времени, ожидайте\n\n`) +
     `*Детали заказа:*\n` +
     `*Услуга:* ${title || 'N/A'}\n` +
-    `*Адрес:* ${streetAndBuildingNumber || 'N/A'}\n` +
+    `*Адрес:* ${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
+      `${foorTEXT}` || ''
+    } \n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
     `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +
