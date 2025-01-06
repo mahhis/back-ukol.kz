@@ -1,11 +1,13 @@
 import { Body, Controller, Ctx, Flow, Get, Post } from 'amala'
 import { Context } from 'koa'
-import { TOrder } from '@/helpers/types'
+import { TOrder, TRating } from '@/helpers/types'
+import { User } from '@/models/User'
 import { badRequest } from '@hapi/boom'
 import {
   createOrder,
   getOrderById,
   getOrderByUserPhoneNumberWithActiveOrder,
+  getOrdersForSpec,
   removeOrder,
 } from '@/models/Order'
 import {
@@ -17,6 +19,9 @@ import {
   notifyAboutCansel,
   sendConfirmationMessageToUser,
   sendMessageToSpecialists,
+  sendSpecAppointedByClient,
+  sendUserDataToAdmin,
+  sendUserDataToSpecialist,
   uploadeAppointmentPhoto,
 } from '@/handlers/bot/api'
 import { scheduleOrderTimeout } from '@/helpers/schedullerAnswers'
@@ -27,7 +32,15 @@ import fs from 'fs'
 import multer from '@koa/multer'
 import path from 'path'
 
-const upload = multer({ dest: './uploads' })
+const UPLOAD_DIR = path.join(__dirname, '../../../../uploads')
+
+// Ensure upload directory exists
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true })
+}
+
+// Configure multer to use the upload directory
+const upload = multer({ dest: UPLOAD_DIR })
 @Controller('order')
 export default class OrderController {
   @Flow([authorize])
@@ -42,20 +55,14 @@ export default class OrderController {
       }
 
       // Define the path to save the file
-      const uploadPath = path.join(
-        __dirname,
-        './../../../uploads',
-        file.originalname
-      )
+      const uploadPath = path.join(UPLOAD_DIR, file.originalname)
 
-      // Move the file to the uploads directory
-      fs.rename(file.path, uploadPath, (err) => {
-        if (err) {
-          console.error('Error saving file:', err)
-          ctx.throw(500, 'Error saving file')
-        }
+      await fs.promises.rename(file.path, uploadPath)
+
+      const response = await uploadeAppointmentPhoto({
+        ...file,
+        path: uploadPath,
       })
-      const response = await uploadeAppointmentPhoto(file)
       return {
         success: true,
         data: { photoURL: response.urlFile },
@@ -154,9 +161,28 @@ export default class OrderController {
     }
   }
 
+  @Get('/spec/:phone')
+  async getOrders(@Ctx() ctx: Context) {
+    try {
+      const { phone } = ctx['params'] // Get phone number from the URL params
+
+      const orders = await getOrdersForSpec(phone)
+
+      return {
+        status: 200,
+        orders: orders,
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+      ctx.throw(500, 'Internal server error')
+    }
+  }
+
   @Post('/reply')
   async answerOnOrder(@Body({ required: true }) data: any) {
     try {
+      console.log(123)
+
       const { typeWebhook } = data
       if (
         typeWebhook == 'outgoingMessageReceived' ||
@@ -180,6 +206,8 @@ export default class OrderController {
         status: 200,
       }
     } catch (e) {
+      console.log(123)
+
       console.log('Error: ', e)
 
       // Send a Telegram notification
@@ -188,6 +216,92 @@ export default class OrderController {
         `*Message:* ${e.message}\n` +
         `*Stack:* \`${e.stack || 'N/A'}\`\n` +
         `*Payload:* \`\`\`${JSON.stringify(data, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
+
+      return {
+        status: 200,
+      }
+    }
+  }
+
+  @Flow([authorize])
+  @Post('/select')
+  async selectSpec(@Body({ required: true }) data: any) {
+    try {
+      const order = await getOrderById(data.currentOrderId)
+      console.log(order)
+      const user = order.user as User
+
+      await sendSpecAppointedByClient(order)
+
+      await sendUserDataToSpecialist(
+        order.idMessageWA!,
+        order.ownerBestBit!,
+        user.phoneNumber
+      )
+      await sendUserDataToAdmin(
+        order.idMessageWA!,
+        env.ADMIN_NUMBER,
+        order.ownerBestBit!,
+        user.phoneNumber
+      )
+      order.status = 'taken'
+      await order.save()
+
+      console.log(data)
+      return {
+        status: 200,
+      }
+    } catch (e) {
+      console.log('Error: ', e)
+
+      // Send a Telegram notification
+      const errorMessage =
+        `*Error in /select Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(data, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
+
+      return {
+        status: 200,
+      }
+    }
+  }
+
+  @Flow([authorize])
+  @Post('/rating/:id')
+  async rating(
+    @Ctx() ctx: Context,
+    @Body({ required: true }) { rating, comment }: TRating
+  ) {
+    try {
+      const { id } = ctx['params']
+      const order = await getOrderById(id)
+      if (rating) {
+        order.rating = rating
+      }
+      if (comment) {
+        order.comment = comment
+      }
+
+      order.status = 'complete'
+      await order.save()
+
+      return {
+        status: 200,
+      }
+    } catch (e) {
+      console.log('Error: ', e)
+
+      // Send a Telegram notification
+      const errorMessage =
+        `*Error in /rating Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify({ rating, comment }, null, 2)}\`\`\``
 
       await errorNotification(errorMessage)
 

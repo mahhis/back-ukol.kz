@@ -68,6 +68,23 @@ export const sendOrderTakenToGroup = async (order: any) => {
   }
 }
 
+export const sendSpecAppointedByClient = async (order: any) => {
+  try {
+    const payload = {
+      chatId: env.CHAT_ID_TEST,
+      message: `❗️Специалист для этого заказа выбран клиентом. Предложения на этот вызов больше не обрабатываются❗️`,
+      quotedMessageId: order.idMessageWA,
+    }
+
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+    return response.data
+  } catch (error) {
+    console.error('Error creating order:', error)
+    throw error
+  }
+}
+
 export const sendSpecialistAlredyFindedMessageToUser = async (
   order: any,
   number: string
@@ -272,7 +289,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const optionsList = Object.entries(options)
     .filter(([, value]) => value) // Оставляем только те опции, у которых значения "правдивы"
     .map(([key]) => {
-      // Заменяем ключи на удобочитаемые строки
+      // Заменяем ключи на удобочитаемые строки         isNeedWoman: boolean,
       switch (key) {
         case 'isNeedPharmacy':
           return 'нужно зайти в аптеку'
@@ -310,6 +327,14 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const optionTEXT = optionsList ? `${optionsList}\n\n` : ''
   const messageTEXT = options.message ? `${options.message}\n\n` : ''
 
+  const isChildTEXT = options.isChild ? `ребенок\n\n` : ''
+  const isNeedWomanTEXT = options.isNeedWoman ? `нужна женщина\n\n` : ''
+
+  // case 'isChild':
+  //   return 'пациент ребенок'
+  // case 'isNeedWoman':
+  //   return 'нужна женщина'
+
   const msg =
     `${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
       `${foorTEXT}` || ''
@@ -317,6 +342,8 @@ function formatOrderMessage(orderDetails: TOrder): string {
     `${LINK_2GIS} \n\n` +
     `${title} \n\n` +
     `${optionTEXT}` +
+    `${isChildTEXT}` +
+    `${isNeedWomanTEXT}` +
     `${messageTEXT}` +
     `${arrivalTimeMessage}\n\n` +
     `${price}`
@@ -344,13 +371,11 @@ function formatOrderMessage(orderDetails: TOrder): string {
 const BASE_URL_UPLOAD = `https://7103.api.greenapi.com/waInstance${env.INSTANCE_ID}/uploadFile/${env.TOKEN}`
 
 export const uploadeAppointmentPhoto = async (file: any) => {
-  const filePath = path.join(__dirname, './../../../uploads', file.originalname) // Adjust the path as necessary
-  const fileBuffer = fs.readFileSync(filePath) // Read the file into a buffer
-
   try {
+    const fileBuffer = await fs.promises.readFile(file.path)
     const response = await axios.post(BASE_URL_UPLOAD, fileBuffer, {
       headers: {
-        'Content-Type': file.mimetype, // Set the correct content type
+        'Content-Type': file.mimetype,
       },
     })
     return response.data
@@ -378,6 +403,8 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
     .map(([key]) => {
       // Replace keys with user-friendly strings
       switch (key) {
+        case 'isNeedWoman':
+          return '• Нужна женщина'
         case 'isNeedPharmacy':
           return '• Нужно зайти в аптеку'
         case 'isHaveDoctorsAppointment':
@@ -409,7 +436,7 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
   const foorTEXT = floor ? `${floor}этаж` : ''
   // Construct the message
   return (
-    `✅*Ваш заказ успешно получен*✅\n\n` +
+    `✅ *Ваш заказ успешно получен* ✅\n\n` +
     (arrivalTime.isNearestHour
       ? `Мы оповестим вас о том когда подберем вам подходящего специалиста\n\n`
       : `Специалист будет к указанному времени, ожидайте\n\n`) +

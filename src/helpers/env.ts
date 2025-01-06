@@ -15,9 +15,11 @@ export default cleanEnv(process.env, {
   JWT_ACCESS_SECRET: str(),
   JWT_REFRESH_SECRET: str(),
   PROD_URL: str(),
+  PROD_SPEC_URL: str(),
   NGROK_URL: str(),
   GOOGLE_MAP_API_KEY: str(),
   ADMIN_NUMBER: str(),
   TELEGRAM_CHAT_ID: str(),
   TELEGRAM_BOT_TOKEN: str(),
+  SPEC_URL: str(),
 })

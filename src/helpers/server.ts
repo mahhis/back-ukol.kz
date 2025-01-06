@@ -21,6 +21,7 @@ export default async function () {
 
   const allowedOrigins = [
     env.PROD_URL,
+    env.PROD_SPEC_URL,
     env.NGROK_URL,
     '46.101.109.139',
     '51.250.12.167',

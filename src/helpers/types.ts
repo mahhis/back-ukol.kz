@@ -11,6 +11,11 @@ export type TUser = {
   phoneNumber?: string
 }
 
+export type TRating = {
+  rating?: number
+  comment?: string
+}
+
 export type TOrder = {
   title?: string
   streetAndBuildingNumber?: string
@@ -18,6 +23,8 @@ export type TOrder = {
   floor?: string
   amount?: number
   options: {
+    isChild: boolean
+    isNeedWoman: boolean
     isNeedPharmacy: boolean
     isHaveDoctorsAppointment: boolean
     isWithDrugsCocktail: boolean

@@ -26,6 +26,8 @@ export class Order {
 
   @prop()
   options?: {
+    isChild: boolean
+    isNeedWoman: boolean
     isNeedPharmacy: boolean
     isHaveDoctorsAppointment: boolean
     isWithDrugsCocktail: boolean
@@ -55,6 +57,12 @@ export class Order {
 
   @prop()
   ownerBestBit?: string
+
+  @prop()
+  rating?: number
+
+  @prop()
+  comment?: string
 
   @prop({ required: true, default: Date.now })
   createdAt!: Date
@@ -167,6 +175,19 @@ export async function getLastOrderWithOwnerBestBit(ownerBestBit: string) {
   }
 }
 
+export async function getOrdersForSpec(phoneNumber: string) {
+  try {
+    const orders = await OrderModel.find({ ownerBestBit: phoneNumber })
+      .sort({ createdAt: -1 })
+      .exec()
+
+    return orders
+  } catch (error) {
+    console.error(`Error fetching order by phoneNumber ${phoneNumber}:`, error)
+    throw error
+  }
+}
+
 export async function getOrderByUserPhoneNumberWithActiveOrder(
   phoneNumber: string
 ) {
@@ -181,7 +202,7 @@ export async function getOrderByUserPhoneNumberWithActiveOrder(
     // Find the order associated with the user
     const order = await OrderModel.findOne({
       user: user._id,
-      status: { $in: ['taken', 'waiting'] }, // Filter for 'taken' or 'waiting'
+      status: { $in: ['taken', 'waiting', 'waiting_rating'] }, // Filter for 'taken' or 'waiting'
     })
       .populate('user') // Populate user details if needed
       .exec()

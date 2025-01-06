@@ -11,12 +11,23 @@ import {
 } from '@/handlers/bot/api'
 import { sendUserDataToAdmin } from '@/handlers/bot/api'
 import { sendUserDataToSpecialist } from '@/handlers/bot/api'
+import axios from 'axios'
 import env from '@/helpers/env'
 
 export const handleResponseOnOrder = async (data: any) => {
-  const order = await getOrdersByIdMessageWA(
-    data.messageData.extendedTextMessageData.stanzaId
-  )
+  const idMessageWA = data.messageData.extendedTextMessageData.stanzaId
+  const order = await getOrdersByIdMessageWA(idMessageWA)
+  try {
+    const axiosResponse = await axios.post(
+      `${env.SPEC_URL}/order/add/${order._id}`,
+      data
+    )
+    console.log('Axios response:', axiosResponse.data)
+  } catch (error) {
+    console.error('Error calling the endpoint:', error.message)
+    return
+  }
+
   if (!order) {
     return
   }
@@ -97,7 +108,7 @@ export const handleCancelOrComplete = async (data: any) => {
 
     if (order) {
       // Update the status of the order
-      order.status = 'complete'
+      order.status = 'waiting_rating'
       await order.save()
 
       const user = order.user as User
