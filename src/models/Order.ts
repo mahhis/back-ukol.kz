@@ -77,6 +77,8 @@ export class Order {
       'idMessageWA',
       '__v',
       'user',
+      'ownerBestBit',
+      'createdAt',
       'streetAndBuildingNumber',
       'amount',
       'arrivalTime',

@@ -4,6 +4,7 @@ import 'source-map-support/register'
 
 import bot from '@/helpers/bot'
 
+import { startOrderStatusTracker } from '@/helpers/trackerOpenOrders'
 import server from '@/helpers/server'
 import startMongo from '@/helpers/startMongo'
 
@@ -14,6 +15,9 @@ async function runApp() {
 
   console.log('Starting server...')
   await server()
+
+  console.log('Starting order tracker...')
+  startOrderStatusTracker()
 
   console.log('Starting bot...')
 

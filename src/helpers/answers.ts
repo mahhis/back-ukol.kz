@@ -5,6 +5,7 @@ import {
   getOrdersByIdMessageWA,
 } from '@/models/Order'
 import {
+  sendAnswerNotProcessed,
   sendMessage,
   sendOrderTakenToGroup,
   sendSpecialistAlredyFindedMessageToUser,
@@ -61,7 +62,7 @@ export const handleResponseOnOrder = async (data: any) => {
   }
   const incomingBit = Number(data.messageData.extendedTextMessageData.text)
   if (isNaN(incomingBit)) {
-    console.log('isNaN')
+    await sendAnswerNotProcessed(data.idMessage)
     return
   }
   if (isOrderOlderThan2Minutes) {
@@ -120,7 +121,8 @@ export const handleCancelOrComplete = async (data: any) => {
 
       await sendMessage(
         user.phoneNumber!,
-        `Ваш заказ завершен. Расскажите, пожалуйста, все ли вас устроило?`
+        `Оставьте, пожалуйста, отзыв по ссылке ниже, это займет меньше 20 секунд \n\n Нам это очень важно \n\n https://ukol.kz/rating/${order._id}
+        `
       ) // to user
 
       await sendMessage(

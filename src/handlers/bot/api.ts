@@ -68,6 +68,23 @@ export const sendOrderTakenToGroup = async (order: any) => {
   }
 }
 
+export const sendAnswerNotProcessed = async (msgID: string) => {
+  try {
+    const payload = {
+      chatId: env.CHAT_ID_TEST,
+      message: `⚠️ Ответ не принят. Взять заказ "на сейчас" можно ТОЛЬКО обратным ответом с количеством минут. \n\n✅ "35" \n\n❌ "35 минут" или "я могу"`,
+      quotedMessageId: msgID,
+    }
+
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+    return response.data
+  } catch (error) {
+    console.error('Error creating order:', error)
+    throw error
+  }
+}
+
 export const sendSpecAppointedByClient = async (order: any) => {
   try {
     const payload = {
@@ -122,7 +139,6 @@ export const sendUserDataToSpecialist = async (
       GET_MESSAGE_BY_ID,
       payloadForGetMessageOrder
     )
-
     let message
     if (messageOrder.data.typeMessage == 'extendedTextMessage') {
       message = messageOrder.data.textMessage
@@ -314,7 +330,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const arrivalTimeMessage =
     arrivalTime && arrivalTime.isNearestHour
       ? 'На сейчас'
-      : `На ${arrivalTime?.date},` +
+      : `На ${arrivalTime?.date},  ` +
         `${arrivalTime?.hours}ч ${arrivalTime?.minutes}мин`
 
   const price = amount !== 0 ? `${amount}₸` : 'цена рассчитывается...'

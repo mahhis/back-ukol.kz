@@ -161,6 +161,16 @@ export default class OrderController {
     }
   }
 
+  @Get('/:id')
+  async getOrder(@Ctx() ctx: Context) {
+    const { id } = ctx['params']
+    const order = await getOrderById(id)
+    return {
+      order: order.strippedAndFilled(),
+      success: true,
+    }
+  }
+
   @Get('/spec/:phone')
   async getOrders(@Ctx() ctx: Context) {
     try {
@@ -181,7 +191,6 @@ export default class OrderController {
   @Post('/reply')
   async answerOnOrder(@Body({ required: true }) data: any) {
     try {
-      console.log(123)
 
       const { typeWebhook } = data
       if (
@@ -206,8 +215,6 @@ export default class OrderController {
         status: 200,
       }
     } catch (e) {
-      console.log(123)
-
       console.log('Error: ', e)
 
       // Send a Telegram notification
@@ -271,7 +278,6 @@ export default class OrderController {
     }
   }
 
-  @Flow([authorize])
   @Post('/rating/:id')
   async rating(
     @Ctx() ctx: Context,
