@@ -14,7 +14,7 @@ export class Order {
   title!: string
 
   @prop({ required: true })
-  streetAndBuildingNumber!: string
+  address!: string
 
   @prop()
   flat?: string
@@ -27,6 +27,7 @@ export class Order {
   @prop()
   options?: {
     isChild: boolean
+    isNeedInjection: boolean
     isNeedWoman: boolean
     isNeedPharmacy: boolean
     isHaveDoctorsAppointment: boolean
@@ -64,6 +65,9 @@ export class Order {
   @prop()
   comment?: string
 
+  @prop({ default: false })
+  reminderSent?: boolean
+
   @prop({ required: true, default: Date.now })
   createdAt!: Date
 
@@ -79,7 +83,7 @@ export class Order {
       'user',
       'ownerBestBit',
       'createdAt',
-      'streetAndBuildingNumber',
+      'address',
       'amount',
       'arrivalTime',
       'options',
@@ -99,7 +103,7 @@ export async function createOrder(user: TUser, orderData: TOrder) {
   const order = {
     user: user, // Set the user reference
     title: orderData.title,
-    streetAndBuildingNumber: orderData.streetAndBuildingNumber,
+    address: orderData.address,
     amount: orderData.amount,
     options: orderData.options, // Use options from orderData
     arrivalTime: orderData.arrivalTime, // Use arrivalTime from orderData

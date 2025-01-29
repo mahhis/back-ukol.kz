@@ -44,6 +44,8 @@ export const handleResponseOnOrder = async (data: any) => {
     order.ownerBestBit = data.senderData.sender.slice(0, -5)
     const user = order.user as User
     await sendOrderTakenToGroup(order)
+    await sendSpecialistAlredyFindedMessageToUser(order, user.phoneNumber)
+
     await sendUserDataToSpecialist(
       order.idMessageWA!,
       order.ownerBestBit!,

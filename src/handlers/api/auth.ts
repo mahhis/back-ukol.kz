@@ -1,10 +1,12 @@
-import { Body, Controller, Ctx, Get, Post } from 'amala'
+import { Body, Controller, Ctx, Flow, Get, Post } from 'amala'
 import { Context } from 'koa'
 import { checkCode, checkPhone, refresh } from '@/models/User'
 
 import { OrderModel, getLastOrderByUser } from '@/models/Order'
 import { TPhoneNumber, TPhoneNumberAndCode } from '@/helpers/types'
 import { badRequest, unauthorized } from '@hapi/boom'
+import { phoneRateLimit } from '@/helpers/phoneRateLimit'
+import errorNotification from '@/helpers/errorNotification'
 //import authorize from '@/midleware/auth'
 
 @Controller('auth')
@@ -28,8 +30,22 @@ export default class AuthController {
         currentOrder: currnetOrder?.strippedAndFilled(), // Convert result to a boolean
       }
     } catch (e) {
-      console.log(e)
-      ctx.throw(badRequest())
+      console.error('Error while auth:', e)
+
+      const errorMessage =
+        `*Error in /refresh Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(
+          ctx.cookies.get('refreshToken'),
+          null,
+          2
+        )}\`\`\``
+
+      await errorNotification(errorMessage)
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      ctx.throw(badRequest(e))
     }
   }
 
@@ -53,11 +69,25 @@ export default class AuthController {
         currentOrder: currnetOrder?.strippedAndFilled, // Convert result to a boolean
       }
     } catch (e) {
-      console.log(e)
+      console.error('Error while auth:', e)
+
+      const errorMessage =
+        `*Error in /code Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify(
+          { phoneNumber, code },
+          null,
+          2
+        )}\`\`\``
+
+      await errorNotification(errorMessage)
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       ctx.throw(unauthorized())
     }
   }
-
+  @Flow(phoneRateLimit)
   @Post('/phone')
   async getPhoneNumber(
     @Ctx() ctx: Context,
@@ -69,7 +99,15 @@ export default class AuthController {
         success: true,
       }
     } catch (e) {
-      console.log(e)
+      console.error('Error while auth:', e)
+
+      const errorMessage =
+        `*Error in /phone Endpoint*\n\n` +
+        `*Message:* ${e.message}\n` +
+        `*Stack:* \`${e.stack || 'N/A'}\`\n` +
+        `*Payload:* \`\`\`${JSON.stringify({ phoneNumber }, null, 2)}\`\`\``
+
+      await errorNotification(errorMessage)
       ctx.throw(badRequest())
     }
   }

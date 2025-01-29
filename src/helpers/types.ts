@@ -18,13 +18,14 @@ export type TRating = {
 
 export type TOrder = {
   title?: string
-  streetAndBuildingNumber?: string
+  address?: string
   flat?: string
   floor?: string
   amount?: number
   options: {
     isChild: boolean
     isNeedWoman: boolean
+    isNeedInjection: boolean
     isNeedPharmacy: boolean
     isHaveDoctorsAppointment: boolean
     isWithDrugsCocktail: boolean

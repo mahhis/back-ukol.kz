@@ -107,18 +107,18 @@ export const sendSpecialistAlredyFindedMessageToUser = async (
   number: string
 ) => {
   try {
-    if (order.arrivalTime.isNearestHour) {
-      const userChatID = number + '@c.us'
-      const arrivalTime = order.bestBit + 10
-      const payload = {
-        chatId: userChatID,
-        message: `🚑 Специалист подтвердил ваш заказ и уже выехал! Ожидайте через ${arrivalTime} минут`,
-      }
-
-      const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
-
-      return response.data
+    const userChatID = number + '@c.us'
+    const arrivalTime = order.bestBit + 10
+    const payload = {
+      chatId: userChatID,
+      message: order.arrivalTime.isNearestHour
+        ? `🚑 Специалист подтвердил ваш заказ и уже выехал! Ожидайте через ${arrivalTime} минут`
+        : `🚑 Специалист подтвердил ваш заказ и будет у вас ${order.arrivalTime.date} в ${order.arrivalTime.hours}:${order.arrivalTime.minutes}`,
     }
+
+    const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
+
+    return response.data
   } catch (error) {
     console.error('Error creating order:', error)
     throw error
@@ -153,7 +153,7 @@ export const sendUserDataToSpecialist = async (
         `Номер для связи с клиентом: +${numberUser}\n` +
         `❕Пожалуйста, позвоните ему перед выездом уточните адрес и скажите, что вы уже выехали❕\n\n` +
         `После выполнения заказа отрпавьте обратным ответом (обратный ответ - это такой же способ отправки сообщений, который вы использовали для взятия заказа) на это сообщение ответ с одним словом "готово", после этого заказ будет завершен \n\n` +
-        `${message}  \n\n`,
+        `${message}`,
     }
 
     const response = await axios.post(BASE_URL_SEND_MESSAGE, payload)
@@ -291,15 +291,8 @@ export const sendVerificationCode = async (phoneNumber: string) => {
 }
 
 function formatOrderMessage(orderDetails: TOrder): string {
-  const {
-    title,
-    streetAndBuildingNumber,
-    flat,
-    floor,
-    amount,
-    options,
-    arrivalTime,
-  } = orderDetails
+  const { title, address, flat, floor, amount, options, arrivalTime } =
+    orderDetails
 
   // Prepare options list, filtering out falsy values and formatting the output
   const optionsList = Object.entries(options)
@@ -335,7 +328,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
 
   const price = amount !== 0 ? `${amount}₸` : 'цена рассчитывается...'
 
-  const encodedAddress = encodeURIComponent(streetAndBuildingNumber!)
+  const encodedAddress = encodeURIComponent(address!)
   const LINK_2GIS = `https://2gis.kz/almaty/search/${encodedAddress}`
 
   const flatTEXT = flat ? `${flat}кв` : ''
@@ -344,6 +337,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const messageTEXT = options.message ? `${options.message}\n\n` : ''
 
   const isChildTEXT = options.isChild ? `ребенок\n\n` : ''
+  const isNeedInjectionTEXT = options.isChild ? `так же поставить укол\n\n` : ''
   const isNeedWomanTEXT = options.isNeedWoman ? `нужна женщина\n\n` : ''
 
   // case 'isChild':
@@ -352,12 +346,11 @@ function formatOrderMessage(orderDetails: TOrder): string {
   //   return 'нужна женщина'
 
   const msg =
-    `${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
-      `${foorTEXT}` || ''
-    } \n\n` +
+    `${address} ${`${flatTEXT}` || ''} ${`${foorTEXT}` || ''} \n\n` +
     `${LINK_2GIS} \n\n` +
     `${title} \n\n` +
     `${optionTEXT}` +
+    `${isNeedInjectionTEXT}` +
     `${isChildTEXT}` +
     `${isNeedWomanTEXT}` +
     `${messageTEXT}` +
@@ -372,7 +365,7 @@ function formatOrderMessage(orderDetails: TOrder): string {
   // return (
   //   `📢 *Заказ*\n\n` +
   //   `*Услуга:* ${title || 'N/A'}\n` +
-  //   `*Адрес:* ${streetAndBuildingNumber}, \n` +
+  //   `*Адрес:* ${address}, \n` +
   //   `*Яндекс Карты:* ${LINK_TO_YANDEX_MAP}\n` +
   //   `*Итог к оплате:* ${amount || 0}₸\n` +
   //   `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
@@ -403,15 +396,8 @@ export const uploadeAppointmentPhoto = async (file: any) => {
 
 function formatConfirmationMessage(orderDetails: TOrder): string {
   // Extracting necessary fields
-  const {
-    title,
-    streetAndBuildingNumber,
-    flat,
-    floor,
-    amount,
-    options,
-    arrivalTime,
-  } = orderDetails
+  const { title, address, flat, floor, amount, options, arrivalTime } =
+    orderDetails
 
   // Prepare options list, filtering out falsy values and formatting the output
   const optionsList = Object.entries(options)
@@ -458,9 +444,7 @@ function formatConfirmationMessage(orderDetails: TOrder): string {
       : `Специалист будет к указанному времени, ожидайте\n\n`) +
     `*Детали заказа:*\n` +
     `*Услуга:* ${title || 'N/A'}\n` +
-    `*Адрес:* ${streetAndBuildingNumber} ${`${flatTEXT}` || ''} ${
-      `${foorTEXT}` || ''
-    } \n` +
+    `*Адрес:* ${address} ${`${flatTEXT}` || ''} ${`${foorTEXT}` || ''} \n` +
     `*Итог к оплате:* ${amount || 0}₸\n` +
     `*Дополнительные услуги:*\n${optionsList || 'Не выбраны'}\n` +
     `*Комментарий к заказу:*\n ${options.message || 'Нету'}\n` +

@@ -10,6 +10,10 @@ import Router from 'koa-router'
 //   getCompleteOrder,
 //   getResponseToOrder,
 // } from '@/helpers/scheduller'
+import { rateLimiter } from '@/helpers/rateLimiter'
+import { requestLogger } from '@/helpers/requestLogger'
+import { startLogRotationCheck } from '@/helpers/logRotation'
+import { startScheduledOrderReminder } from '@/helpers/scheduledOrderReminder.ts'
 import cookie from 'koa-cookie'
 import cors from '@koa/cors'
 import env from '@/helpers/env'
@@ -19,8 +23,17 @@ const app = new Koa()
 export default async function () {
   const router = new Router()
 
+  startScheduledOrderReminder()
+  // Check if logs need rotation
+  startLogRotationCheck()
+
+  // Add request logger before other middleware
+  app.use(requestLogger)
+  app.use(rateLimiter)
+
   const allowedOrigins = [
     env.PROD_URL,
+    env.DEV_URL,
     env.PROD_SPEC_URL,
     env.NGROK_URL,
     '46.101.109.139',
