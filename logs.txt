@@ -11709,3 +11709,43 @@ Query Params: {}
 Response Status: 200
 Response Time: 5ms
 ----------------------------------------
+
+[2025-01-29T17:19:28.099Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:19:28.100Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:19:28.102Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 7ms
+----------------------------------------
+
+[2025-01-29T17:19:28.103Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 6ms
+----------------------------------------
