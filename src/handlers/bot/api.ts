@@ -337,7 +337,9 @@ function formatOrderMessage(orderDetails: TOrder): string {
   const messageTEXT = options.message ? `${options.message}\n\n` : ''
 
   const isChildTEXT = options.isChild ? `ребенок\n\n` : ''
-  const isNeedInjectionTEXT = options.isChild ? `так же поставить укол\n\n` : ''
+  const isNeedInjectionTEXT = options.isNeedInjection
+    ? `так же поставить укол\n\n`
+    : ''
   const isNeedWomanTEXT = options.isNeedWoman ? `нужна женщина\n\n` : ''
 
   // case 'isChild':

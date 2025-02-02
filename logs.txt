@@ -11749,3 +11749,513 @@ Query Params: {}
 Response Status: 200
 Response Time: 6ms
 ----------------------------------------
+
+[2025-01-29T17:20:28.117Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:20:28.116Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:20:28.122Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 6ms
+----------------------------------------
+
+[2025-01-29T17:20:28.124Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 4ms
+----------------------------------------
+
+[2025-01-29T17:21:28.117Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:21:28.117Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:21:28.123Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 10ms
+----------------------------------------
+
+[2025-01-29T17:21:28.125Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 8ms
+----------------------------------------
+
+[2025-01-29T17:21:54.707Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 2ms
+----------------------------------------
+
+[2025-01-29T17:21:54.711Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 12ms
+----------------------------------------
+
+[2025-01-29T17:21:55.289Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:21:55.292Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 12ms
+----------------------------------------
+
+[2025-01-29T17:22:08.251Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:22:08.255Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 13ms
+----------------------------------------
+
+[2025-01-29T17:30:19.067Z] SUCCESS
+Path: OPTIONS /auth/refresh
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:30:19.069Z] SUCCESS
+Path: GET /auth/refresh
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 40ms
+----------------------------------------
+
+[2025-01-29T17:30:34.177Z] SUCCESS
+Path: OPTIONS /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:30:34.180Z] SUCCESS
+Path: POST /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 522ms
+----------------------------------------
+
+[2025-01-29T17:30:34.719Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:30:34.720Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:30:34.722Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 11ms
+----------------------------------------
+
+[2025-01-29T17:30:34.735Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 9ms
+----------------------------------------
+
+[2025-01-29T17:30:40.115Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:30:40.118Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 10ms
+----------------------------------------
+
+[2025-01-29T17:30:45.114Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:30:45.119Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 404
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-29T17:30:50.118Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 404
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:31:12.055Z] SUCCESS
+Path: OPTIONS /auth/phone
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-29T17:31:12.059Z] SUCCESS
+Path: POST /auth/phone
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 278ms
+----------------------------------------
+
+[2025-01-31T17:32:37.052Z] SUCCESS
+Path: OPTIONS /auth/phone
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 4ms
+----------------------------------------
+
+[2025-01-31T17:32:37.061Z] SUCCESS
+Path: POST /auth/phone
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 829ms
+----------------------------------------
+
+[2025-01-31T17:32:49.707Z] SUCCESS
+Path: OPTIONS /auth/code
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-31T17:32:49.710Z] SUCCESS
+Path: POST /auth/code
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 36ms
+----------------------------------------
+
+[2025-01-31T17:32:49.773Z] SUCCESS
+Path: OPTIONS /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-31T17:32:49.777Z] SUCCESS
+Path: POST /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 426ms
+----------------------------------------
+
+[2025-01-31T17:32:50.232Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-31T17:32:50.234Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-31T17:32:50.236Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 12ms
+----------------------------------------
+
+[2025-01-31T17:32:50.240Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 10ms
+----------------------------------------
+
+[2025-01-31T17:32:55.238Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-31T17:32:55.241Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 15ms
+----------------------------------------
+
+[2025-01-31T17:33:34.074Z] SUCCESS
+Path: OPTIONS /auth/refresh
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-31T17:33:34.075Z] SUCCESS
+Path: GET /auth/refresh
+IP: ::1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 6ms
+----------------------------------------
+
+[2025-01-31T17:33:58.481Z] SUCCESS
+Path: OPTIONS /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-31T17:33:58.485Z] SUCCESS
+Path: POST /order/create
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 424ms
+----------------------------------------
+
+[2025-01-31T17:33:58.937Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 0ms
+----------------------------------------
+
+[2025-01-31T17:33:58.937Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-31T17:33:58.939Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 9ms
+----------------------------------------
+
+[2025-01-31T17:33:58.941Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 7ms
+----------------------------------------
+
+[2025-01-31T17:34:03.938Z] SUCCESS
+Path: OPTIONS /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 204
+Response Time: 1ms
+----------------------------------------
+
+[2025-01-31T17:34:03.942Z] SUCCESS
+Path: GET /order/check
+IP: ::1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1
+Request Body: {}
+Query Params: {}
+Response Status: 200
+Response Time: 10ms
+----------------------------------------
