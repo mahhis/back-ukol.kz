@@ -3,6 +3,8 @@ import { TokenType, verify } from '@/helpers/jwt'
 import { User, UserModel } from '@/models/User'
 import { badRequest, forbidden, notFound } from '@hapi/boom'
 
+//test
+
 export default async function authorize(ctx: Context, next: Next) {
   let userToken = ctx.headers.authorization
   if (!userToken) {
